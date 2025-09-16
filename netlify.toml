@@ -1,0 +1,19 @@
+[build.environment]
+# Modestly raise Node.js heap and reduce parallel workers to lower RAM spikes
+NODE_OPTIONS = "--max-old-space-size=3072"
+SWC_WORKER_COUNT = "1"
+NEXT_TELEMETRY_DISABLED = "1"
+
+[[redirects]]
+# Serve a favicon to avoid framework 502s when /favicon.ico is requested
+from = "/favicon.ico"
+to = "/vercel.svg"
+status = 200
+force = true
+
+[[redirects]]
+# Move root to account (middleware removed)
+from = "/"
+to = "/account"
+status = 301
+force = true

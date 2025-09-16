@@ -1,0 +1,72 @@
+@use "sass:meta";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+/* Core imports - ordered by dependency */
+@include meta.load-css("fonts");
+@include meta.load-css("loading");
+@include meta.load-css("modal");
+@include meta.load-css("accordion");
+@include meta.load-css("toast");
+
+/* Utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .widget-container {
+    @apply w-full max-w-[min(472px,100%)];
+  }
+}
+
+/* Base styles */
+@layer base {
+  html {
+    font-family: CircularXXSub, system-ui, sans-serif;
+  }
+
+  body {
+    max-width: 100vw;
+    height: 100%;
+    overflow-x: hidden;
+    /* This is a workaround for a Radix UI issue where dialogs can interfere with pointer events.
+     * When a Radix dialog is open, it may incorrectly block pointer events on other elements,
+     * particularly affecting third-party components rendered inside the dialog.
+     * Setting pointer-events to 'unset' ensures elements remain interactive.
+     * @see https://github.com/radix-ui/primitives/issues/2122
+     */
+    pointer-events: unset !important;
+  }
+
+  /* Theme colors */
+  :root {
+    --color-border: var(--sand-4);
+    --color-label: var(--sand-12);
+    --color-warning: var(--amber-a2);
+    --color-warning-foreground: var(--amber-a11);
+  }
+  .dark {
+    /**
+		 * It's not a mistake, duplicating the same color values here.
+		 * They are Radix UI colors palette, and they're switched based on the theme.
+		 */
+    --color-border: var(--sand-4);
+    --color-label: var(--sand-12);
+    --color-warning: var(--amber-a2);
+    --color-warning-foreground: var(--amber-a11);
+  }
+}
+
+/* Template-specific styles */
+html.tmpl-solswap,
+.tmpl-solswap body {
+  background: var(--purple-2);
+}
+
+html.tmpl-dogecoinswap,
+.tmpl-dogecoinswap body {
+  background: var(--gray-2);
+}
