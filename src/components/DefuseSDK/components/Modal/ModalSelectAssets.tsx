@@ -9,7 +9,6 @@ import {
   useMemo,
   useState,
 } from "react"
-import { useWatchHoldings } from "../../features/account/hooks/useWatchHoldings"
 import type { BalanceMapping } from "../../features/machines/depositedBalanceMachine"
 import { useModalStore } from "../../providers/ModalStoreProvider"
 import { useTokensStore } from "../../providers/TokensStoreProvider"
@@ -63,15 +62,17 @@ export const ModalSelectAssets = () => {
   const { data, isLoading } = useTokensStore((state) => state)
   const deferredQuery = useDeferredValue(searchValue)
 
+  // Minimal demo: omit live holdings lookup to reduce dependencies
   const { state } = useConnectWallet()
   const userId =
     state.isVerified && state.address && state.chainType
       ? authIdentity.authHandleToIntentsUserId(state.address, state.chainType)
       : null
-  const holdings = useWatchHoldings({
-    userId,
-    tokenList: Array.from(data.values()),
-  })
+  const holdings: Array<{
+    token: BaseTokenInfo | UnifiedTokenInfo
+    value: TokenValue
+    usdValue?: number
+  }> | undefined = undefined
 
   const handleSearchClear = () => setSearchValue("")
 
@@ -114,8 +115,7 @@ export const ModalSelectAssets = () => {
     const fieldName = payload_.fieldName || "token"
     const selectToken = payload_[fieldName]
 
-    const isHoldingsEnabled =
-      payload_.isHoldingsEnabled ?? payload_.balances != null
+    const isHoldingsEnabled = false
 
     // TODO: remove this once we remove the legacy props
     const balances = (payload as ModalSelectAssetsPayload).balances ?? {}
@@ -134,17 +134,15 @@ export const ModalSelectAssets = () => {
       // TODO: remove this once we remove the legacy props
       const balance = computeTotalBalanceDifferentDecimals(token, balances)
 
-      const findHolding = isHoldingsEnabled
-        ? holdings?.find((holding) => getTokenId(holding.token) === tokenId)
-        : undefined
+      const findHolding = undefined
 
       getAssetList.push({
         token,
         disabled,
         selected: disabled,
-        usdValue: findHolding?.usdValue,
-        value: findHolding?.value ?? balance,
-        isHoldingsEnabled,
+        usdValue: undefined,
+        value: balance,
+        isHoldingsEnabled: false,
       })
     }
 
@@ -177,7 +175,7 @@ export const ModalSelectAssets = () => {
     })
 
     setAssetList(getAssetList)
-  }, [data, isLoading, payload, holdings])
+  }, [data, isLoading, payload])
 
   const filteredAssets = useMemo(
     () => assetList.filter(filterPattern),

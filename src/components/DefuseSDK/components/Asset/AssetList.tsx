@@ -11,8 +11,7 @@ import type {
 import type { SelectItemToken } from "../Modal/ModalSelectAssets"
 
 import { chainIcons } from "@src/components/DefuseSDK/constants/blockchains"
-import { FormattedCurrency } from "../../features/account/components/shared/FormattedCurrency"
-import { formatTokenValue } from "../../utils/format"
+import { formatTokenValue, formatUsdAmount } from "../../utils/format"
 import { getTokenId, isBaseToken } from "../../utils/token"
 import { AssetComboIcon } from "./AssetComboIcon"
 
@@ -78,14 +77,10 @@ export const AssetList = <T extends Token>({
                     {token.symbol}
                   </Text>
                   {usdValue != null ? (
-                    <FormattedCurrency
-                      value={usdValue}
-                      formatOptions={{ currency: "USD" }}
-                      className="text-sm font-medium text-gray-11"
-                    />
-                  ) : (
-                    ""
-                  )}
+                    <span className="text-sm font-medium text-gray-11">
+                      {formatUsdAmount(usdValue)}
+                    </span>
+                  ) : null}
                 </div>
               </div>
             </button>
