@@ -28,7 +28,4 @@ done
 json_content="${json_content%, }]"
 echo "$json_content" > "$output_file"
 
-# Format the output file
-bun biome format "$output_file" --write
-
 echo "Banned near addresses generated successfully in $output_file"
