@@ -1,6 +1,5 @@
 "use client"
 import { InitDefuseSDK } from "@src/components/InitDefuseSDK"
-import { SentryTracer } from "@src/components/SentryTracer"
 import { config as wagmiConfig } from "@src/config/wagmi"
 import queryClient from "@src/constants/queryClient"
 import { WebAuthnProvider } from "@src/features/webauthn/providers/WebAuthnProvider"
@@ -22,7 +21,6 @@ export default function ClientProviders({ children }: { children: ReactNode }) {
               <WebAuthnProvider>
                 <MixpanelProvider>{children}</MixpanelProvider>
               </WebAuthnProvider>
-              <SentryTracer />
             </NearWalletProvider>
             {APP_ENV === "development" && (
               <ReactQueryDevtools initialIsOpen={false} />

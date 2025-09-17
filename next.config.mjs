@@ -1,4 +1,3 @@
-import { withSentryConfig } from "@sentry/nextjs"
 import { DedupePlugin } from "@tinkoff/webpack-dedupe-plugin"
 
 /** @type {import('next').NextConfig} */
@@ -100,22 +99,4 @@ const nextConfig = {
   },
 }
 
-/** @type {import('@sentry/nextjs').SentryBuildOptions} */
-const sentryConfig = {
-  org: "aurora-k2",
-  project: "defuse",
-  silent: true,
-  widenClientFileUpload: true,
-  hideSourceMaps: false,
-  disableLogger: true,
-  reactComponentAnnotation: {
-    enabled: true,
-  },
-  tunnelRoute: "/monitoring",
-  automaticVercelMonitors: true,
-  sourcemaps: {
-    disable: true,
-  },
-}
-
-export default withSentryConfig(nextConfig, sentryConfig)
+export default nextConfig

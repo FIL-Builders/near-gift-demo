@@ -1,5 +1,3 @@
-import * as Sentry from "@sentry/core"
-
 export type Context = Record<string, unknown>
 export type Contexts = Record<string, Context | undefined>
 
@@ -22,23 +20,15 @@ export interface ILogger {
 const noopLogger: ILogger = {
   verbose: (msg, data) => {
     console.log(msg, data)
-    Sentry.addBreadcrumb({
-      message: msg,
-      category: "defuse-sdk",
-      data: data,
-    })
   },
   info: (msg, contexts) => {
     console.log(msg, contexts)
-    Sentry.captureMessage(msg, { contexts, level: "info" })
   },
   warn: (msg, contexts) => {
     console.warn(msg, contexts)
-    Sentry.captureMessage(msg, { contexts, level: "warning" })
   },
   error: (err, contexts) => {
     console.error(err, contexts)
-    Sentry.captureException(err, { contexts })
   },
 }
 
