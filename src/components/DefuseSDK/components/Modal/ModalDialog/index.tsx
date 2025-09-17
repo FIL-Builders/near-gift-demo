@@ -14,7 +14,7 @@ export const ModalDialog = ({
   onClose?: () => void
   isDismissable?: boolean
 }>) => {
-  const { onCloseModal } = useModalStore((state) => state)
+  const { onCloseModal } = useModalStore()
   const [open, setOpen] = useState(true)
 
   const handleCloseModal = useCallback(() => {

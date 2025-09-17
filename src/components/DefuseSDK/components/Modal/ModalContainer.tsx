@@ -1,12 +1,10 @@
-import { useModalStore } from "../../providers/ModalStoreProvider"
-
-import { ModalType } from "../../stores/modalStore"
+import { useModalStore, ModalType } from "../../providers/ModalStoreProvider"
 
 import { ModalConfirmAddPubkey } from "./ModalConfirmAddPubkey"
 import { ModalSelectAssets } from "./ModalSelectAssets"
 
 export const ModalContainer = () => {
-  const { modalType } = useModalStore((state) => state)
+  const { modalType } = useModalStore()
 
   switch (modalType) {
     case ModalType.MODAL_SELECT_ASSETS:

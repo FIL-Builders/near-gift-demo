@@ -10,9 +10,7 @@ import {
   useState,
 } from "react"
 import type { BalanceMapping } from "../../features/machines/depositedBalanceMachine"
-import { useModalStore } from "../../providers/ModalStoreProvider"
-import { useTokensStore } from "../../providers/TokensStoreProvider"
-import { ModalType } from "../../stores/modalStore"
+import { useModalStore, ModalType } from "../../providers/ModalStoreProvider"
 import type {
   BaseTokenInfo,
   TokenValue,
@@ -37,6 +35,7 @@ export type ModalSelectAssetsPayload = {
   tokenIn?: Token
   tokenOut?: Token
   fieldName?: "tokenIn" | "tokenOut" | "token"
+  tokenList?: (BaseTokenInfo | UnifiedTokenInfo)[]
   /** @deprecated legacy props use holdings instead */
   balances?: BalanceMapping
   accountId?: string
@@ -58,8 +57,7 @@ export const ModalSelectAssets = () => {
   const [searchValue, setSearchValue] = useState("")
   const [assetList, setAssetList] = useState<SelectItemToken[]>([])
 
-  const { onCloseModal, modalType, payload } = useModalStore((state) => state)
-  const { data, isLoading } = useTokensStore((state) => state)
+  const { onCloseModal, modalType, payload } = useModalStore()
   const deferredQuery = useDeferredValue(searchValue)
 
   // Minimal demo: omit live holdings lookup to reduce dependencies
@@ -107,10 +105,6 @@ export const ModalSelectAssets = () => {
   }
 
   useEffect(() => {
-    if (!data.size && !isLoading) {
-      return
-    }
-
     const payload_ = payload as ModalSelectAssetsPayload
     const fieldName = payload_.fieldName || "token"
     const selectToken = payload_[fieldName]
@@ -127,8 +121,11 @@ export const ModalSelectAssets = () => {
       : undefined
 
     const getAssetList: SelectItemToken[] = []
-
-    for (const [tokenId, token] of data) {
+    const list = payload_.tokenList ?? []
+    for (const token of list) {
+      const tokenId = isBaseToken(token)
+        ? token.defuseAssetId
+        : token.unifiedAssetId
       const disabled = selectedTokenId != null && tokenId === selectedTokenId
 
       // TODO: remove this once we remove the legacy props
@@ -175,7 +172,7 @@ export const ModalSelectAssets = () => {
     })
 
     setAssetList(getAssetList)
-  }, [data, isLoading, payload])
+  }, [payload])
 
   const filteredAssets = useMemo(
     () => assetList.filter(filterPattern),

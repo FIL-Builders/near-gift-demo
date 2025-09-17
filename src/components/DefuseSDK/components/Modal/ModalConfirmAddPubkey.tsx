@@ -9,7 +9,7 @@ export type ModalConfirmAddPubkeyPayload = {
 }
 
 export const ModalConfirmAddPubkey = () => {
-  const { onCloseModal, payload } = useModalStore((state) => state)
+  const { onCloseModal, payload } = useModalStore()
   const { accountId, onConfirm, onAbort } =
     payload as ModalConfirmAddPubkeyPayload
 

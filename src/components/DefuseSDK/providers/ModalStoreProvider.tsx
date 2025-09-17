@@ -1,39 +1,52 @@
-import { type ReactNode, createContext, useContext, useRef } from "react"
-import { type StoreApi, useStore } from "zustand"
+import { type ReactNode, createContext, useContext, useMemo, useState } from "react"
 
-import {
-  type ModalStore,
-  createModalStore,
-  initModalStore,
-} from "../stores/modalStore"
+export enum ModalType {
+  MODAL_SELECT_ASSETS = "modalSelectAssets",
+  MODAL_CONFIRM_ADD_PUBKEY = "modalConfirmAddPubKey",
+  MODAL_SELECT_NETWORK = "modalSelectNetwork",
+}
 
-export const ModalStoreContext = createContext<StoreApi<ModalStore> | null>(
-  null
-)
+type ModalContext = {
+  modalType: ModalType | null
+  payload?: unknown
+  setModalType: (modalType: ModalType | null, payload?: unknown) => void
+  onCloseModal: (payload?: unknown) => void
+}
+
+const ModalStoreContext = createContext<ModalContext | null>(null)
 
 export interface ModalStoreProviderProps {
   children: ReactNode
 }
 
 export const ModalStoreProvider = ({ children }: ModalStoreProviderProps) => {
-  const storeRef = useRef<StoreApi<ModalStore> | null>(null)
-  if (!storeRef.current) {
-    storeRef.current = createModalStore(initModalStore())
-  }
+  const [modalType, setModalType_] = useState<ModalType | null>(null)
+  const [payload, setPayload] = useState<unknown>(undefined)
+
+  const value: ModalContext = useMemo(
+    () => ({
+      modalType,
+      payload,
+      setModalType: (type, p) => {
+        setModalType_(type)
+        setPayload(p)
+      },
+      onCloseModal: (p) => {
+        setModalType_(null)
+        if (p !== undefined) setPayload(p)
+        else setPayload(undefined)
+      },
+    }),
+    [modalType, payload]
+  )
 
   return (
-    <ModalStoreContext.Provider value={storeRef.current}>
-      {children}
-    </ModalStoreContext.Provider>
+    <ModalStoreContext.Provider value={value}>{children}</ModalStoreContext.Provider>
   )
 }
 
-export const useModalStore = <T,>(selector: (store: ModalStore) => T): T => {
-  const modalStoreContext = useContext(ModalStoreContext)
-
-  if (!modalStoreContext) {
-    throw new Error("useModalStore must be use within ModalStoreProvider")
-  }
-
-  return useStore(modalStoreContext, selector)
+export const useModalStore = (): ModalContext => {
+  const ctx = useContext(ModalStoreContext)
+  if (!ctx) throw new Error("useModalStore must be used within ModalStoreProvider")
+  return ctx
 }
