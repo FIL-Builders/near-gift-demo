@@ -26,7 +26,7 @@ export const ButtonIcon = ({
       )}
       onClick={onClick && onClick}
     >
-      <div className="flex w-full h-full justify-center items-center bg-white-200 dark:bg-black-800">
+      <div className="flex w-full h-full justify-center items-center bg-white-200">
         {icon && (
           <img
             src={icon}

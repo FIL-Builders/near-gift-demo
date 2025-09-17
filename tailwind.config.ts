@@ -7,7 +7,6 @@ import defaultTheme from "tailwindcss/defaultTheme"
 import plugin from "tailwindcss/plugin"
 
 const config: Config = {
-  darkMode: "selector",
   content: [
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -254,14 +253,10 @@ const config: Config = {
       boxShadow: {
         paper:
           "0px 8px 40px 0px rgba(0, 0, 0, 0.05), 0px 12px 32px -16px rgba(32, 16, 0, 0.06);",
-        "paper-dark":
-          "0px 12px 32px -16px rgba(246, 246, 245, 0.07), 0px 8px 40px 0px rgba(0, 0, 0, 0.05)",
         widget:
           "0px 12px 62px 0px rgba(0, 0, 0, 0.15), 0px 12px 32px -16px rgba(31, 24, 0, 0.13)",
         "select-token":
           "0px 0px 0px 0.5px rgba(0, 0, 0, 0.05), 0px 1px 4px 0px rgba(31, 21, 0, 0.1), 0px 2px 1px -1px rgba(0, 0, 0, 0.05), 0px 1px 3px 0px rgba(0, 0, 0, 0.05)",
-        "select-token-dark":
-          "0px 1px 3px 0px rgba(0, 0, 0, 0.05), 0px 2px 1px -1px rgba(0, 0, 0, 0.05), 0px 1px 4px 0px rgba(254, 254, 243, 0.11), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.05)",
         "home-paper": "0px -28px 40px 0px rgba(0, 0, 0, 0.08)",
         "card-multi":
           "0px 12px 32px -16px rgba(31, 24, 0, 0.13), 0px 12px 60px 0px rgba(0, 0, 0, 0.15)",
@@ -269,8 +264,6 @@ const config: Config = {
           "0px 16px 36px -20px rgba(25, 20, 0, 0.21), 0px 16px 64px 0px rgba(37, 37, 0, 0.03), 0px 12px 60px 0px rgba(0, 0, 0, 0.15)",
         "switch-token":
           "0px 1px 3px 0px rgba(0, 0, 0, 0.05), 0px 2px 1px -1px rgba(0, 0, 0, 0.05), 0px 1px 4px 0px rgba(31, 21, 0, 0.10), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.05)",
-        "switch-token-dark":
-          "0px 1px 3px 0px rgba(255, 255, 255, 0.05), 0px 2px 1px -1px rgba(255, 255, 255, 0.05), 0px 1px 4px 0px rgba(224, 234, 255, 0.10), 0px 0px 0px 0.5px rgba(255, 255, 255, 0.05)",
       },
       scale: {
         103: "1.03",
@@ -325,9 +318,7 @@ const config: Config = {
       },
       backgroundImage: {
         "page-light": "url(/static/images/bg-light.svg)",
-        "page-dark": "url(/static/images/bg-dark.svg)",
         "page-light--mobile": "url(/static/images/bg-light--mobile.svg)",
-        "page-dark--mobile": "url(/static/images/bg-dark--mobile.svg)",
         "card-vision-account-fi": "url(/static/images/group-account-fi.svg)",
         "card-vision-account-fi--mobile":
           "url(/static/images/group-account-fi--mobile.svg)",

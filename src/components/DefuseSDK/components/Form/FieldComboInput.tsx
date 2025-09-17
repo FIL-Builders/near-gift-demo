@@ -121,7 +121,7 @@ export const FieldComboInput = <T extends FieldValues>({
   return (
     <div
       className={clsx(
-        "relative flex flex-col px-5 pt-5 pb-6 w-full bg-gray-2 dark:border-gray-4",
+        "relative flex flex-col px-5 pt-5 pb-6 w-full bg-gray-2",
         className
       )}
     >

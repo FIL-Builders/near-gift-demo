@@ -200,7 +200,7 @@ export const ModalSelectAssets = () => {
             <SearchBar query={searchValue} setQuery={setSearchValue} />
           </div>
         </div>
-        <div className="z-10 flex-1 overflow-y-auto border-b border-gray-1 dark:border-black-950 -mr-[var(--inset-padding-right)] pr-[var(--inset-padding-right)]">
+        <div className="z-10 flex-1 overflow-y-auto border-b border-gray-1 -mr-[var(--inset-padding-right)] pr-[var(--inset-padding-right)]">
           {assetList.length ? (
             <AssetList
               assets={deferredQuery ? filteredAssets : assetList}

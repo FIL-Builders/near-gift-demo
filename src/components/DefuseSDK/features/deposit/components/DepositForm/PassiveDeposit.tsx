@@ -65,7 +65,7 @@ export function PassiveDeposit({
         Use this deposit address
       </div>
 
-      <div className="mt-1 text-gray-11 text-sm dark:text-gray-11">
+      <div className="mt-1 text-gray-11 text-sm">
         Always double-check your deposit address — it may change without notice.
       </div>
 

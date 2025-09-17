@@ -112,7 +112,7 @@ const WalletConnections = () => {
       <Text
         size="1"
         weight="medium"
-        className="text-gray-a11 dark:text-gray-a11 pb-2"
+        className="text-gray-a11 pb-2"
       >
         Connected with
       </Text>

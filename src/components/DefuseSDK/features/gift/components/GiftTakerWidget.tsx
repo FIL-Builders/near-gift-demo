@@ -26,9 +26,6 @@ export type GiftTakerWidgetProps = {
   userAddress: string | null | undefined
   userChainType: AuthMethod | null | undefined
 
-  /** Theme selection */
-  theme?: "dark" | "light"
-
   renderHostAppLink: RenderHostAppLink
 }
 

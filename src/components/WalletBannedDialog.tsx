@@ -37,10 +37,10 @@ function FailureContent({
     <>
       {/* Header Section */}
       <div className="flex flex-col items-center text-center mb-6">
-        <div className="bg-amber-50 dark:bg-amber-950 p-3 rounded-full mb-4">
-          <ExclamationTriangleIcon className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+        <div className="bg-amber-50 p-3 rounded-full mb-4">
+          <ExclamationTriangleIcon className="w-6 h-6 text-amber-600" />
         </div>
-        <AlertDialog.Title className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+        <AlertDialog.Title className="text-xl font-semibold text-gray-900">
           Not Supported Wallet Address
         </AlertDialog.Title>
         <AlertDialog.Description className="mt-2 text-gray-11">
@@ -49,11 +49,11 @@ function FailureContent({
       </div>
 
       {/* Info List */}
-      <div className="bg-gray-50 dark:bg-gray-800 text-gray-11 rounded-lg p-4 mb-5">
+      <div className="bg-gray-50 text-gray-11 rounded-lg p-4 mb-5">
         <ul className="space-y-3">
           <li className="flex items-start gap-3">
-            <div className="bg-amber-100 dark:bg-amber-900 rounded-full p-1 mt-0.5">
-              <MagnifyingGlassIcon className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+            <div className="bg-amber-100 rounded-full p-1 mt-0.5">
+              <MagnifyingGlassIcon className="w-3 h-3 text-amber-600" />
             </div>
             <span className="text-sm">
               Wallet address was created before EVM support was added to NEAR

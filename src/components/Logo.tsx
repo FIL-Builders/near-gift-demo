@@ -12,18 +12,10 @@ const Logo = () => {
     return (
       <Link href={navigation.home}>
         <Image
-          src="/static/templates/solswap/logo_dark.svg"
-          alt="Solswap Logo"
-          width={100}
-          height={32}
-          className="hidden dark:block"
-        />
-        <Image
           src="/static/templates/solswap/logo.svg"
           alt="Solswap Logo"
           width={100}
           height={32}
-          className="dark:hidden"
         />
       </Link>
     )
@@ -33,18 +25,10 @@ const Logo = () => {
     return (
       <Link href={navigation.home}>
         <Image
-          src="/static/templates/turboswap/logo_dark.svg"
-          alt="Turboswap Logo"
-          width={120}
-          height={32}
-          className="hidden dark:block"
-        />
-        <Image
           src="/static/templates/turboswap/logo.svg"
           alt="Turboswap Logo"
           width={120}
           height={32}
-          className="dark:hidden"
         />
       </Link>
     )
@@ -54,18 +38,10 @@ const Logo = () => {
     return (
       <Link href={navigation.home}>
         <Image
-          src="/static/templates/dogecoinswap/logo_dark.svg"
-          alt="Dogecoinswap Logo"
-          width={118}
-          height={32}
-          className="hidden dark:block"
-        />
-        <Image
           src="/static/templates/dogecoinswap/logo.svg"
           alt="Dogecoinswap Logo"
           width={118}
           height={32}
-          className="dark:hidden"
         />
       </Link>
     )
@@ -75,18 +51,10 @@ const Logo = () => {
     return (
       <Link href={navigation.home}>
         <Image
-          src="/static/templates/trumpswap/logo_dark.svg"
-          alt="TrumpSwap Logo"
-          width={126}
-          height={32}
-          className="hidden dark:block"
-        />
-        <Image
           src="/static/templates/trumpswap/logo.svg"
           alt="TrumpSwap Logo"
           width={126}
           height={32}
-          className="dark:hidden"
         />
       </Link>
     )
@@ -95,18 +63,10 @@ const Logo = () => {
   return (
     <Link href={navigation.home}>
       <Image
-        src="/static/templates/near-intents/logo_dark.svg"
-        alt="Near Intent Logo"
-        width={125}
-        height={32}
-        className="hidden dark:block"
-      />
-      <Image
         src="/static/templates/near-intents/logo.svg"
         alt="Near Intent Logo"
         width={125}
         height={32}
-        className="dark:hidden"
       />
     </Link>
   )

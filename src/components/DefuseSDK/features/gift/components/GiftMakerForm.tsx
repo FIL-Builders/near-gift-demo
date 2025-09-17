@@ -174,7 +174,7 @@ export function GiftMakerForm({
     const _payload = payload as ModalSelectAssetsPayload
     const token = _payload[fieldName || "token"]
     if (modalType === ModalType.MODAL_SELECT_ASSETS && fieldName && token) {
-      formValuesRef.trigger.updateToken({ value: token })
+      ;(formValuesRef as any).trigger.updateToken({ value: token })
     }
   }, [payload, formValuesRef])
 
@@ -185,22 +185,22 @@ export function GiftMakerForm({
     return checkInsufficientBalance(formValues.amount, tokenBalance)
   }, [formValues.amount, tokenBalance])
 
-  const editing = rootSnapshot.matches("editing")
+  const editing = (rootSnapshot as any).matches("editing")
   const processing =
-    rootSnapshot.matches("signing") ||
-    rootSnapshot.matches("saving") ||
-    rootSnapshot.matches("publishing") ||
-    rootSnapshot.matches("updating") ||
-    rootSnapshot.matches("settling") ||
-    rootSnapshot.matches("removing")
+    (rootSnapshot as any).matches("signing") ||
+    (rootSnapshot as any).matches("saving") ||
+    (rootSnapshot as any).matches("publishing") ||
+    (rootSnapshot as any).matches("updating") ||
+    (rootSnapshot as any).matches("settling") ||
+    (rootSnapshot as any).matches("removing")
 
   const processingLabel = (() => {
-    if (rootSnapshot.matches("signing")) return "Signing…"
-    if (rootSnapshot.matches("saving")) return "Saving…"
-    if (rootSnapshot.matches("publishing")) return "Publishing…"
-    if (rootSnapshot.matches("settling")) return "Waiting for settlement…"
-    if (rootSnapshot.matches("updating")) return "Finalizing…"
-    if (rootSnapshot.matches("removing")) return "Cleaning up…"
+    if ((rootSnapshot as any).matches("signing")) return "Signing…"
+    if ((rootSnapshot as any).matches("saving")) return "Saving…"
+    if ((rootSnapshot as any).matches("publishing")) return "Publishing…"
+    if ((rootSnapshot as any).matches("settling")) return "Waiting for settlement…"
+    if ((rootSnapshot as any).matches("updating")) return "Finalizing…"
+    if ((rootSnapshot as any).matches("removing")) return "Cleaning up…"
     return null
   })()
 
@@ -254,7 +254,7 @@ export function GiftMakerForm({
   )
 
   useEffect(() => {
-    if (publicKeyVerifierSnapshot?.matches("checked")) {
+    if ((publicKeyVerifierSnapshot as any)?.matches("checked")) {
       _publicKeyVerifierRef?.send({
         type: "ADD_PUBLIC_KEY",
         sendNearTransaction,
@@ -264,7 +264,7 @@ export function GiftMakerForm({
 
   const handleSetMaxValue = async () => {
     if (tokenBalance != null) {
-      formValuesRef.trigger.updateAmount({
+      ;(formValuesRef as any).trigger.updateAmount({
         value: formatTokenValue(tokenBalance.amount, tokenBalance.decimals),
       })
     }
@@ -272,7 +272,7 @@ export function GiftMakerForm({
 
   const handleSetHalfValue = async () => {
     if (tokenBalance != null) {
-      formValuesRef.trigger.updateAmount({
+      ;(formValuesRef as any).trigger.updateAmount({
         value: formatTokenValue(
           tokenBalance.amount / 2n,
           tokenBalance.decimals
@@ -296,10 +296,7 @@ export function GiftMakerForm({
     setUploadProgress(0)
     try {
       const { default: lighthouse } = await import("@lighthouse-web3/sdk")
-      const progressCallback = (progressData: {
-        total: number
-        uploaded: number
-      }) => {
+      const progressCallback = (progressData: any) => {
         try {
           const pct =
             100 -
@@ -314,12 +311,12 @@ export function GiftMakerForm({
       const output = await lighthouse.upload(
         files,
         apiKey,
-        null,
+        undefined,
         progressCallback
       )
       const cid = output?.data?.Hash as string | undefined
       if (!cid) throw new Error("Upload failed: no CID returned")
-      formValuesRef.trigger.updateImageCid({ value: cid })
+      ;(formValuesRef as any).trigger.updateImageCid({ value: cid })
       setUploadProgress(100)
     } catch (e) {
       setUploadError(e instanceof Error ? e.message : "Upload failed")
@@ -330,7 +327,7 @@ export function GiftMakerForm({
 
   return (
     <div className="flex flex-col">
-      {rootSnapshot.matches("settled") &&
+      {(rootSnapshot as any).matches("settled") &&
         readyGiftRef != null &&
         signerCredentials != null && (
           <GiftMakerReadyDialog
@@ -379,7 +376,7 @@ export function GiftMakerForm({
                   name="amount"
                   value={formValues.amount}
                   onChange={(e) =>
-                    formValuesRef.trigger.updateAmount({
+                    (formValuesRef as any).trigger.updateAmount({
                       value: e.target.value,
                     })
                   }
@@ -435,7 +432,7 @@ export function GiftMakerForm({
                   name="message"
                   value={formValues.message}
                   onChange={(e) =>
-                    formValuesRef.trigger.updateMessage({
+                    (formValuesRef as any).trigger.updateMessage({
                       value: e.target.value,
                     })
                   }
