@@ -4,7 +4,7 @@ import type {
   TokenValue,
   UnifiedTokenInfo,
 } from "../../../types/base"
-import { parseUnits } from "../../../utils/parse"
+import { parseUnits } from "viem"
 import { getTokenMaxDecimals } from "../../../utils/tokenUtils"
 import type { GiftMakerFormValuesState } from "./giftMakerFormValuesStore"
 
