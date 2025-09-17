@@ -8,7 +8,7 @@ export default function LandingPage() {
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 transform">
         <Link
           href="/gift-card/create-gift"
-          className="rounded-md bg-black px-6 py-3 text-white shadow hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+          className="rounded-full bg-black px-8 py-3 text-white shadow hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
         >
           Get started
         </Link>

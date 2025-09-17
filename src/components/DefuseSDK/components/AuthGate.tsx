@@ -22,6 +22,7 @@ export function AuthGate({
         <Button
           asChild
           size="4"
+          radius="full"
           className={cn("w-full h-14 font-bold", className)}
         >
           <div>Sign in</div>

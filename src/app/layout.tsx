@@ -1,3 +1,4 @@
+import { Theme } from "@radix-ui/themes"
 import type { Metadata, Viewport } from "next"
 import type { ReactNode } from "react"
 import { Suspense } from "react"
@@ -40,9 +41,11 @@ const RootLayout = async ({
   return (
     <html lang="en" suppressHydrationWarning className={"tmpl-near-intents"}>
       <body>
-        <Suspense fallback={null}>
-          <ClientProviders>{children}</ClientProviders>
-        </Suspense>
+        <Theme accentColor="orange" radius="full">
+          <Suspense fallback={null}>
+            <ClientProviders>{children}</ClientProviders>
+          </Suspense>
+        </Theme>
       </body>
       {HELPSCOUT_BEACON_ID && <Helpscout />}
     </html>
