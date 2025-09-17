@@ -10,7 +10,6 @@ import type {
 } from "../../types/base"
 import type { SelectItemToken } from "../Modal/ModalSelectAssets"
 
-import { chainIcons } from "@src/components/DefuseSDK/constants/blockchains"
 import { formatTokenValue, formatUsdAmount } from "../../utils/format"
 import { getTokenId, isBaseToken } from "../../utils/token"
 import { AssetComboIcon } from "./AssetComboIcon"
@@ -36,9 +35,6 @@ export const AssetList = <T extends Token>({
     <div className={clsx("flex flex-col", className && className)}>
       {assets.map(
         ({ token, selected, isHoldingsEnabled, value, usdValue }, i) => {
-          const chainIcon = isBaseToken(token)
-            ? chainIcons[token.chainName]
-            : undefined
 
           return (
             <button
@@ -55,9 +51,8 @@ export const AssetList = <T extends Token>({
                 <AssetComboIcon
                   icon={token.icon}
                   name={token.name}
-                  showChainIcon={showChain && chainIcon !== undefined}
+                  showChainIcon={false}
                   chainName={isBaseToken(token) ? token.chainName : undefined}
-                  chainIcon={chainIcon}
                 />
                 {selected && (
                   <div className="absolute top-1 -right-1.5 rounded-full">
