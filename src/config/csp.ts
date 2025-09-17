@@ -22,7 +22,6 @@ const cspConfig = {
     "'self'",
     "'unsafe-inline'",
     "'unsafe-eval'",
-    "https://www.googletagmanager.com",
     "https://beacon-v2.helpscout.net",
     "https://vercel.live",
   ],
@@ -39,10 +38,8 @@ const cspConfig = {
     /** Services */
     "https://*.chaindefuser.com",
     "wss://*.chaindefuser.com",
-    "https://*.google-analytics.com",
     "https://*.near-intents.org",
     "https://api.hyperunit.xyz",
-    "https://region1.google-analytics.com",
     "https://as.coinbase.com/metrics",
     "https://api-js.mixpanel.com",
 

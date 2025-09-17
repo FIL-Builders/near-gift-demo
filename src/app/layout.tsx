@@ -1,4 +1,3 @@
-import { GoogleAnalytics } from "@next/third-parties/google"
 import type { Metadata, Viewport } from "next"
 import type { ReactNode } from "react"
 import { Suspense } from "react"
@@ -45,7 +44,6 @@ const RootLayout = async ({
           <ClientProviders>{children}</ClientProviders>
         </Suspense>
       </body>
-      <GoogleAnalytics gaId="G-WNE3NB46KM" />
       {HELPSCOUT_BEACON_ID && <Helpscout />}
     </html>
   )
