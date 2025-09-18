@@ -14,6 +14,8 @@ const ZEC: TokenWithTags = {
   symbol: "ZEC",
   name: "Zcash",
   icon: "https://s2.coinmarketcap.com/static/img/coins/128x128/1437.png",
+  // Use the maximum decimals across grouped tokens
+  decimals: 8,
   groupedTokens: [
     {
       defuseAssetId: "nep141:zec.omft.near",
@@ -44,6 +46,8 @@ const NEAR: TokenWithTags = {
   symbol: "NEAR",
   name: "Near",
   icon: "https://s2.coinmarketcap.com/static/img/coins/128x128/6535.png",
+  // Use the maximum decimals across grouped tokens
+  decimals: 24,
   groupedTokens: [
     {
       defuseAssetId: "nep141:wrap.near",
@@ -69,4 +73,3 @@ export const LIST_TOKENS: TokenWithTags[] =
 export const DEPRECATED_TOKENS: Record<string, boolean> = {
   "nep141:aurora": true,
 }
-
