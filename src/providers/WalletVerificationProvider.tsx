@@ -15,7 +15,6 @@ import {
   verifyWalletSignature,
   walletVerificationMessageFactory,
 } from "@src/utils/walletMessage"
-import { useMixpanel } from "./MixpanelProvider"
 
 export function WalletVerificationProvider() {
   const { state, signOut } = useConnectWallet()
@@ -78,7 +77,6 @@ function WalletVerificationUI({
   const { state: unconfirmedWallet } = useConnectWallet()
 
   const signMessage = useWalletAgnosticSignMessage()
-  const mixPanel = useMixpanel()
 
   const [state, send, serviceRef] = useActor(
     walletVerificationMachine.provide({
@@ -118,21 +116,12 @@ function WalletVerificationUI({
       serviceRef.subscribe((state) => {
         if (state.matches("verified")) {
           onConfirmRef.current()
-          mixPanel?.track("wallet_verified", {
-            wallet: unconfirmedWallet.address,
-            wallet_type: unconfirmedWallet.chainType,
-          })
         }
         if (state.matches("aborted")) {
           onAbortRef.current()
         }
       }).unsubscribe,
-    [
-      serviceRef,
-      mixPanel,
-      unconfirmedWallet.address,
-      unconfirmedWallet.chainType,
-    ]
+    [serviceRef, unconfirmedWallet.address, unconfirmedWallet.chainType]
   )
 
   return (

@@ -8,11 +8,7 @@ import ClientProviders from "./ClientProviders"
 
 import "@radix-ui/themes/styles.css"
 import "../styles/global.scss"
-import Helpscout from "@src/components/Helpscout"
-import {
-  HELPSCOUT_BEACON_ID,
-  VERCEL_PROJECT_PRODUCTION_URL,
-} from "@src/utils/environment"
+import { VERCEL_PROJECT_PRODUCTION_URL } from "@src/utils/environment"
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -47,7 +43,7 @@ const RootLayout = async ({
           </Suspense>
         </Theme>
       </body>
-      {HELPSCOUT_BEACON_ID && <Helpscout />}
+      {/* Removed Helpscout beacon */}
     </html>
   )
 }
