@@ -5,7 +5,16 @@ import { base64urlnopad } from "@scure/base"
 import { sign } from "tweetnacl"
 import { logger } from "../logger"
 import type { CredentialKey, CurveType } from "../types/webAuthn"
-import { concatUint8Arrays } from "./uint8Array"
+function concatUint8Arrays(arrays: Uint8Array[]): Uint8Array {
+  const total = arrays.reduce((sum, a) => sum + a.length, 0)
+  const out = new Uint8Array(total)
+  let offset = 0
+  for (const a of arrays) {
+    out.set(a, offset)
+    offset += a.length
+  }
+  return out
+}
 
 export function parsePublicKey(formattedPublicKey: string): CredentialKey {
   const curveType = getCurveType(formattedPublicKey)

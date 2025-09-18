@@ -22,9 +22,7 @@ const cspConfig = {
     "'self'",
     "'unsafe-inline'",
     "'unsafe-eval'",
-    "https://www.googletagmanager.com",
-    "https://beacon-v2.helpscout.net",
-    "https://vercel.live",
+    
   ],
   "worker-src": [
     "'self'",
@@ -39,12 +37,9 @@ const cspConfig = {
     /** Services */
     "https://*.chaindefuser.com",
     "wss://*.chaindefuser.com",
-    "https://*.google-analytics.com",
     "https://*.near-intents.org",
     "https://api.hyperunit.xyz",
-    "https://region1.google-analytics.com",
-    "https://as.coinbase.com/metrics",
-    "https://api-js.mixpanel.com",
+    
 
     /** Stage Solver Relay and Bridge Services */
     "https://*.intents-near.org",
@@ -57,9 +52,7 @@ const cspConfig = {
     /** NEAR Mobile Signer Services */
     "https://*.peersyst.tech",
 
-    /** Helpscout */
-    "https://beaconapi.helpscout.net",
-    "https://*.cloudfront.net",
+    
 
     /** Wallets */
     "https://*.walletconnect.org",

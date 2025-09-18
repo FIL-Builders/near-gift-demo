@@ -10,15 +10,12 @@ import { ButtonCustom } from "../../../components/Button/ButtonCustom"
 import type { ModalSelectAssetsPayload } from "../../../components/Modal/ModalSelectAssets"
 import { SelectAssets } from "../../../components/SelectAssets"
 import type { SignerCredentials } from "../../../core/formatters"
-import { useTokensUsdPrices } from "../../../hooks/useTokensUsdPrices"
-import { useModalStore } from "../../../providers/ModalStoreProvider"
-import { ModalType } from "../../../stores/modalStore"
+import { useModalStore, ModalType } from "../../../providers/ModalStoreProvider"
 import type { BaseTokenInfo, UnifiedTokenInfo } from "../../../types/base"
 import type { RenderHostAppLink } from "../../../types/hostAppLink"
 import type { SwappableToken } from "../../../types/swap"
 import { assert } from "../../../utils/assert"
 import { formatTokenValue, formatUsdAmount } from "../../../utils/format"
-import getTokenUsdPrice from "../../../utils/getTokenUsdPrice"
 import { TokenAmountInputCard } from "../../deposit/components/DepositForm/TokenAmountInputCard"
 import { balanceAllSelector } from "../../machines/depositedBalanceMachine"
 import type { SendNearTransaction } from "../../machines/publicKeyVerifierMachine"
@@ -141,14 +138,9 @@ export function GiftMakerForm({
   useCheckSignerCredentials(rootActorRef, signerCredentials)
   useBalanceUpdaterSyncWithHistory(rootActorRef, signerCredentials)
 
-  const { data: tokensUsdPriceData } = useTokensUsdPrices()
-  const usdAmount = getTokenUsdPrice(
-    formValues.amount,
-    formValues.token,
-    tokensUsdPriceData
-  )
+  const usdAmount = null
 
-  const { setModalType, payload } = useModalStore((state) => state)
+  const { setModalType, payload } = useModalStore()
 
   const openModalSelectAssets = (
     fieldName: string,
@@ -157,6 +149,7 @@ export function GiftMakerForm({
     setModalType(ModalType.MODAL_SELECT_ASSETS, {
       ...(payload as ModalSelectAssetsPayload),
       fieldName,
+      tokenList,
       [fieldName]: token,
       isHoldingsEnabled: true,
     })

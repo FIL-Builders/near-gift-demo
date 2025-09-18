@@ -3,6 +3,7 @@
 NODE_OPTIONS = "--max-old-space-size=3072"
 SWC_WORKER_COUNT = "1"
 NEXT_TELEMETRY_DISABLED = "1"
+NODE_VERSION = "20.18.0"
 
 [[redirects]]
 # Serve a favicon to avoid framework 502s when /favicon.ico is requested

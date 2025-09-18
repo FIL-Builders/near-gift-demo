@@ -1,33 +1,35 @@
 "use client"
-import { Suspense } from "react"
-
-import { AccountWidget } from "@src/components/DefuseSDK/features/account/components/AccountWidget"
-
-import Paper from "@src/components/Paper"
-import { LIST_TOKENS } from "@src/constants/tokens"
 import { useConnectWallet } from "@src/hooks/useConnectWallet"
-import { useTokenList } from "@src/hooks/useTokenList"
-import { renderAppLink } from "@src/utils/renderAppLink"
+import Link from "next/link"
 
-function AccountContent() {
-  const { state } = useConnectWallet()
-  const tokenList = useTokenList(LIST_TOKENS)
-
-  return (
-    <Paper>
-      <AccountWidget
-        tokenList={tokenList}
-        userAddress={(state.isVerified ? state.address : undefined) ?? null}
-        userChainType={state.chainType ?? null}
-        renderHostAppLink={renderAppLink}
-      />
-    </Paper>
-  )
-}
 export default function AccountPage() {
+  const { state } = useConnectWallet()
+  const address = state.isVerified ? state.address : null
+
   return (
-    <Suspense fallback={null}>
-      <AccountContent />
-    </Suspense>
+    <main className="mx-auto max-w-xl p-6">
+      <h1 className="text-2xl font-bold mb-4">Account</h1>
+      <div className="rounded-xl border p-4 bg-gray-1">
+        <div className="text-sm text-gray-11">Connected address</div>
+        <div className="font-mono break-all text-lg">
+          {address ?? "Not connected"}
+        </div>
+      </div>
+
+      <div className="mt-6 grid grid-cols-3 gap-3">
+        <Link href="/deposit" className="rounded-md bg-black px-4 py-2 text-white text-center">
+          Deposit
+        </Link>
+        <Link href="/withdraw" className="rounded-md bg-black px-4 py-2 text-white text-center">
+          Withdraw
+        </Link>
+        <Link
+          href="/gift-card/create-gift"
+          className="rounded-md bg-black px-4 py-2 text-white text-center"
+        >
+          Gift
+        </Link>
+      </div>
+    </main>
   )
 }

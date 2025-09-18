@@ -1,5 +1,5 @@
 "use client"
-import { WithdrawWidget } from "@src/components/DefuseSDK/features/withdraw/components/WithdrawWidget"
+import { WithdrawWidget } from "@defuse-protocol/defuse-sdk"
 import Paper from "@src/components/Paper"
 import { LIST_TOKENS } from "@src/constants/tokens"
 import { useConnectWallet } from "@src/hooks/useConnectWallet"

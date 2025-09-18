@@ -7,7 +7,6 @@ import {
   useWebAuthnCurrentCredential,
   useWebAuthnUIStore,
 } from "@src/features/webauthn/hooks/useWebAuthnStore"
-import { useSignInLogger } from "@src/hooks/useSignInLogger"
 import { useNearWallet } from "@src/providers/NearWalletProvider"
 import { useVerifiedWalletsStore } from "@src/stores/useVerifiedWalletsStore"
 import type { SignAndSendTransactionsParams } from "@src/types/interfaces"
@@ -138,11 +137,7 @@ export const useConnectWallet = (): ConnectWalletAction => {
     state = impersonatedUser
   }
 
-  const { onSignOut } = useSignInLogger(
-    state.address,
-    state.chainType,
-    state.isVerified
-  )
+  // analytics removed
 
   return {
     async signIn(params: {
@@ -185,7 +180,7 @@ export const useConnectWallet = (): ConnectWalletAction => {
             await Promise.all(tasks)
           },
         }
-        onSignOut()
+        // analytics removed
         const fn = strategies[params.id]
         if (!fn)
           throw new WalletDisconnectError(

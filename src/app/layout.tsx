@@ -1,4 +1,4 @@
-import { GoogleAnalytics } from "@next/third-parties/google"
+import { Theme } from "@radix-ui/themes"
 import type { Metadata, Viewport } from "next"
 import type { ReactNode } from "react"
 import { Suspense } from "react"
@@ -8,11 +8,7 @@ import ClientProviders from "./ClientProviders"
 
 import "@radix-ui/themes/styles.css"
 import "../styles/global.scss"
-import Helpscout from "@src/components/Helpscout"
-import {
-  HELPSCOUT_BEACON_ID,
-  VERCEL_PROJECT_PRODUCTION_URL,
-} from "@src/utils/environment"
+import { VERCEL_PROJECT_PRODUCTION_URL } from "@src/utils/environment"
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -41,12 +37,13 @@ const RootLayout = async ({
   return (
     <html lang="en" suppressHydrationWarning className={"tmpl-near-intents"}>
       <body>
-        <Suspense fallback={null}>
-          <ClientProviders>{children}</ClientProviders>
-        </Suspense>
+        <Theme accentColor="orange" radius="full">
+          <Suspense fallback={null}>
+            <ClientProviders>{children}</ClientProviders>
+          </Suspense>
+        </Theme>
       </body>
-      <GoogleAnalytics gaId="G-WNE3NB46KM" />
-      {HELPSCOUT_BEACON_ID && <Helpscout />}
+      {/* Removed Helpscout beacon */}
     </html>
   )
 }

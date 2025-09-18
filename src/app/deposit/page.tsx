@@ -1,7 +1,6 @@
 "use client"
 import { Suspense } from "react"
-
-import { DepositWidget } from "@src/components/DefuseSDK/features/deposit/components/DepositWidget"
+import { DepositWidget } from "@defuse-protocol/defuse-sdk"
 import Paper from "@src/components/Paper"
 import { LIST_TOKENS } from "@src/constants/tokens"
 import { ChainType, useConnectWallet } from "@src/hooks/useConnectWallet"
