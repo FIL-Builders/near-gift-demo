@@ -1,4 +1,4 @@
-import type { WhitelabelTemplateValue } from "@src/config/featureFlags"
+import type { WhitelabelTemplateValue } from "@src/config/domains"
 import { FeatureFlagsContext } from "@src/providers/FeatureFlagsProvider"
 import { useContext } from "react"
 

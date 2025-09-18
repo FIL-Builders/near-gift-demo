@@ -1,7 +1,7 @@
 "use client"
 import type { ReactNode } from "react"
 
-import type { WhitelabelTemplateValue } from "@src/config/featureFlags"
+import type { WhitelabelTemplateValue } from "@src/config/domains"
 import { FeatureFlagsProvider } from "@src/providers/FeatureFlagsProvider"
 
 export function PreloadFeatureFlags({ children }: { children: ReactNode }) {

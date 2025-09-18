@@ -4,17 +4,10 @@ import type { PropsWithChildren } from "react"
 
 import Layout from "@src/components/Layout"
 import { PreloadFeatureFlags } from "@src/components/PreloadFeatureFlags"
-import { whitelabelTemplateFlag } from "@src/config/featureFlags"
 import { settings } from "@src/config/settings"
 
 export async function generateMetadata(): Promise<Metadata> {
-  const templ = await whitelabelTemplateFlag()
-
-  if (templ !== "dogecoinswap") {
-    return settings.metadata.deposit
-  }
-
-  return {}
+  return settings.metadata.deposit
 }
 
 const DepositLayout: React.FC<PropsWithChildren> = ({ children }) => {
