@@ -1,6 +1,6 @@
 "use client"
 
-import { Plus } from "@phosphor-icons/react"
+import { Plus, Gift } from "@phosphor-icons/react"
 import { navigation } from "@src/constants/routes"
 import { useIsActiveLink } from "@src/hooks/useIsActiveLink"
 import { cn } from "@src/utils/cn"
@@ -13,6 +13,7 @@ export function NavbarMobile() {
 
   const isAccountActive = isActive(navigation.account)
   const isDepositActive = isActive(navigation.deposit)
+  const isGiftActive = isActive(navigation.gift)
 
   return (
     <>
@@ -30,7 +31,26 @@ export function NavbarMobile() {
             }
           />
 
-          {/* Trade removed */}
+          {/* Gift */}
+          <NavItem
+            href={navigation.gift}
+            label="Gift"
+            isActive={isGiftActive}
+            iconSlot={
+              <NavItem.DisplayIcon>
+                {
+                  <div
+                    className={cn(
+                      "flex items-center justify-center w-4 h-4 rounded-full",
+                      isGiftActive ? "bg-gray-12" : "bg-gray-11"
+                    )}
+                  >
+                    <Gift className="size-3 text-gray-1" weight="bold" />
+                  </div>
+                }
+              </NavItem.DisplayIcon>
+            }
+          />
 
           {/* Deposit */}
           <NavItem
