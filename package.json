@@ -75,7 +75,6 @@
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
-
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@rollup/plugin-alias": "^5.1.1",
@@ -106,7 +105,6 @@
     "husky": "^9.1.1",
     "jsdom": "^26.1.0",
     "json-schema-to-typescript": "^15.0.4",
-
     "msw": "^2.7.0",
     "postcss": "^8.4.47",
     "postcss-import": "^15.1.0",
@@ -120,10 +118,9 @@
     "typescript": "^5",
     "vitest": "^2.1.2"
   },
-  
   "resolutions": {
     "use-sync-external-store": "^1.2.0",
     "near-api-js": "^5.1.1"
-  }
-  
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
