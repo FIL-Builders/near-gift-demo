@@ -38,7 +38,7 @@ export async function parseGiftInfos(
           escrowCredentials.credential
         )
       } catch (err: unknown) {
-        logger.error(new Error("error parsing gift info", { cause: err }))
+        logger.warn(new Error("error parsing gift info", { cause: err }) as any)
         assert(tokenList[0], "tokenList[0] is not undefined")
         return createTaggedGift("claimed", gift, tokenList[0], "dontcare")
       }

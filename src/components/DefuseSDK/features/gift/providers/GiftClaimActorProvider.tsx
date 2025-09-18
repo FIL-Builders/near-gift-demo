@@ -85,8 +85,8 @@ export function GiftClaimActorProvider({
           .getState()
           .removeGift(giftInfo.secretKey, signerCredentials)
         if (result.tag === "err") {
-          logger.error(
-            new Error("Failed to remove gift", { cause: result.reason })
+          logger.warn(
+            new Error("Failed to remove gift", { cause: result.reason }) as any
           )
         }
       }

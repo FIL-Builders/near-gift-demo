@@ -45,7 +45,7 @@ export const giftMakerPublishingActor = setup({
     publishActor: fromPromise(({ input }: { input: MultiPayload }) => {
       // Extra diagnostics: log the relay endpoint and payload shape size
       try {
-        logger.error("publishActor: attempting relay publish", {
+        logger.warn("publishActor: attempting relay publish", {
           solverRelayBaseURL: config.env.solverRelayBaseURL,
           payloadBytes: (() => {
             try {
@@ -66,7 +66,7 @@ export const giftMakerPublishingActor = setup({
         .then((result) => {
           if (result.isErr()) {
             try {
-              logger.error("publishActor: relay returned error", {
+              logger.warn("publishActor: relay returned error", {
                 error: result.unwrapErr(),
               })
             } catch {}
@@ -79,7 +79,7 @@ export const giftMakerPublishingActor = setup({
         .catch((e) => {
           // Network or unexpected runtime error
           try {
-            logger.error("publishActor: network/exception", {
+            logger.warn("publishActor: network/exception", {
               error: e instanceof Error ? e.message : String(e),
             })
           } catch {}
@@ -89,7 +89,7 @@ export const giftMakerPublishingActor = setup({
   },
   actions: {
     logError: (_, event: { error: unknown }) => {
-      logger.error(event.error)
+      logger.warn(event.error as any)
     },
     setError: assign({
       error: (_, error: GiftMakerPublishingActorErrors) => error,

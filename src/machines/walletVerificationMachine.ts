@@ -14,7 +14,7 @@ export const walletVerificationMachine = setup({
   },
   actions: {
     logError: (_, { error }: { error: unknown }) => {
-      logger.error(error)
+      logger.warn(error as any)
     },
     setError: assign({
       hadError: (_, { hadError }: { hadError: true }) => hadError,

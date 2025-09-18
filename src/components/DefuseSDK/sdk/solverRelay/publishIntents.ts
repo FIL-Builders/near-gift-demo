@@ -24,7 +24,7 @@ export function convertPublishIntentsToLegacyFormat(
 
   // Extra diagnostics to help CORS/network debugging in learning edition
   try {
-    logger.error("solverRelay.publishIntents failed", {
+    logger.warn("solverRelay.publishIntents failed", {
       where: "convertPublishIntentsToLegacyFormat",
       solverRelayBaseURL: config.env.solverRelayBaseURL,
       errorCode,

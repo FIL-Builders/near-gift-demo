@@ -77,7 +77,7 @@ export const migrateGiftStorage = (
 
     return currentState.state as State
   } catch (error) {
-    logger.error(new Error("Failed to migrate gift storage", { cause: error }))
+    logger.warn(new Error("Failed to migrate gift storage", { cause: error }) as any)
     throw new Error("Failed to migrate gift storage. Please contact support.")
   }
 }

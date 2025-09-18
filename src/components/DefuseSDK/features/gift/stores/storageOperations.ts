@@ -37,7 +37,7 @@ export const storage = {
 
       return deserialize(storageData) as { state: State; version: number }
     } catch (error) {
-      logger.error(new Error("Failed to get data", { cause: error }))
+      logger.warn(new Error("Failed to get data", { cause: error }) as any)
       throw new Error("Failed to get data")
     }
   },
@@ -52,7 +52,7 @@ export const storage = {
 
       return { tag: "ok" }
     } catch (error) {
-      logger.error(new Error("Failed to set item", { cause: error }))
+      logger.warn(new Error("Failed to set item", { cause: error }) as any)
       return { tag: "err", reason: "ERR_SET_ITEM_FAILED_TO_STORAGE" }
     }
   },
@@ -67,7 +67,7 @@ export const storage = {
 
       return { tag: "ok" }
     } catch (error) {
-      logger.error(new Error("Failed to update item", { cause: error }))
+      logger.warn(new Error("Failed to update item", { cause: error }) as any)
       return { tag: "err", reason: "ERR_UPDATE_ITEM_FAILED_TO_STORAGE" }
     }
   },
@@ -78,7 +78,7 @@ export const storage = {
 
       return { tag: "ok" }
     } catch (error) {
-      logger.error(new Error("Failed to remove item", { cause: error }))
+      logger.warn(new Error("Failed to remove item", { cause: error }) as any)
       return { tag: "err", reason: "ERR_REMOVE_ITEM_FAILED_FROM_STORAGE" }
     }
   },

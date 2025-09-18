@@ -192,7 +192,7 @@ function extractSignedChallenge(
       return clientData.challenge
     }
   } catch {
-    logger.error("Failed to parse clientDataJSON")
+    logger.warn("Failed to parse clientDataJSON")
   }
 
   return null

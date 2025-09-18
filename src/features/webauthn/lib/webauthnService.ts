@@ -158,7 +158,7 @@ async function extractCredentialPublicKey(credential: PublicKeyCredential) {
   return parsePublicKeyWithWebCrypto(
     credential.response as AuthenticatorAttestationResponse
   ).catch(async (err) => {
-    logger.error(err)
+    logger.warn(err as any)
 
     // Fallback
     const { parsePublicKeyFromCBOR } = await import("./parsePublicKeyFromCBOR")

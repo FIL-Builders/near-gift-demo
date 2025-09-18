@@ -11,8 +11,8 @@ export function formatGiftDate(dateString: number): string {
       year: "numeric",
     }).format(new Date(dateString))
   } catch (error) {
-    logger.error(
-      new Error("Failed to format Gift updatedAt date", { cause: error })
+    logger.warn(
+      new Error("Failed to format Gift updatedAt date", { cause: error }) as any
     )
     return "-"
   }

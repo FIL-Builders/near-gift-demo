@@ -55,7 +55,7 @@ export const publicKeyVerifierMachine = setup({
   },
   actions: {
     logError: (_, { error }: { error: unknown }) => {
-      logger.error(error)
+      logger.warn(error as any)
     },
     setError: assign({
       error: (_, { error }: { error: ErrorCodes }) => error,

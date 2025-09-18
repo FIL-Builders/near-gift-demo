@@ -100,7 +100,7 @@ export function useGiftIntent() {
             }
           }
         } catch (_error) {
-          logger.error("Failed to decrypt order")
+          logger.warn("Failed to decrypt order")
         }
       }
 
@@ -111,7 +111,7 @@ export function useGiftIntent() {
           payload: decoded,
         }
       } catch (_error) {
-        logger.error("Failed to decode legacy order")
+        logger.warn("Failed to decode legacy order")
       }
 
       return { payload: "" }

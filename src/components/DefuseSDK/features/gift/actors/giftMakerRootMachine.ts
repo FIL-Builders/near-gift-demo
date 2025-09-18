@@ -140,7 +140,7 @@ export const giftMakerRootMachine = setup({
           logger.info("settlingActor: settled", { intentHash })
           return res
         } catch (e) {
-          logger.error("settlingActor: wait failed", {
+          logger.warn("settlingActor: wait failed", {
             intentHash,
             error: e instanceof Error ? e.message : String(e),
           })
@@ -194,8 +194,8 @@ export const giftMakerRootMachine = setup({
 
           return { tag: "ok", value: { iv } }
         } catch (err) {
-          // Surface detailed error to console/Sentry via SDK logger in dev/prod
-          logger.error(err, {
+          // Surface detailed warning (non-fatal in UI context)
+          logger.warn(err as any, {
             where: "giftMaker.savingGift",
             note: "Supabase insert or client createGift failed",
             signDataPresent: Boolean(input.signData),
@@ -259,9 +259,9 @@ export const giftMakerRootMachine = setup({
     logError: (_, event: { error: unknown }) => {
       // Be lenient: avoid throwing inside logging
       try {
-        logger.error(event.error)
+        logger.warn(event.error as any)
       } catch {
-        logger.error("[giftMakerRootMachine] logError: unable to log event")
+        logger.warn("[giftMakerRootMachine] logError: unable to log event")
       }
     },
     setError: assign({

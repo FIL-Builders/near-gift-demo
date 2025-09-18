@@ -52,7 +52,7 @@ export const maintenanceModeFlag = flag({
       const isMaintenanceMode = await get("isMaintenanceMode")
       return isMaintenanceMode === true
     } catch (err) {
-      logger.error(err)
+      logger.warn(err as any)
       return false
     }
   },

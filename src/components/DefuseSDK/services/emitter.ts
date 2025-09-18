@@ -22,7 +22,7 @@ type EmitTypes =
 
 export const emitEvent = (type: EmitTypes, data: unknown) => {
   if (!bus) {
-    logger.error("EventEmitter not set!")
+    logger.warn("EventEmitter not set!")
     return
   }
   bus.emit(type, data)

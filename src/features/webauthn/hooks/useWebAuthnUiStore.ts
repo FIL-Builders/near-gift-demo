@@ -35,7 +35,7 @@ export const useWebAuthnUIStore = create<State & Actions>()((set, get) => ({
       await useWebAuthnStore.getState().createNew(passkeyName)
       set({ isOpen: false })
     } catch (error) {
-      logger.error(error)
+      logger.warn(error as any)
       set({ error: toError(error).message })
     } finally {
       set({ isCreating: false })
@@ -48,7 +48,7 @@ export const useWebAuthnUIStore = create<State & Actions>()((set, get) => ({
       await useWebAuthnStore.getState().signIn()
       set({ isOpen: false })
     } catch (error) {
-      logger.error(error)
+      logger.warn(error as any)
       set({ error: toError(error).message })
     } finally {
       set({ isSigningIn: false })

@@ -83,7 +83,7 @@ export const giftMakerHistoryStore = create<Store>()(
           set(newState)
           return result
         } catch (error) {
-          logger.error(new Error("Failed to add gift", { cause: error }))
+          logger.warn(new Error("Failed to add gift", { cause: error }) as any)
           return { tag: "err", reason: "ERR_UPDATE_ITEM_FAILED_TO_STORAGE" }
         }
       },
@@ -111,7 +111,7 @@ export const giftMakerHistoryStore = create<Store>()(
           set(newState)
           return result
         } catch (error) {
-          logger.error(new Error("Failed to update gift", { cause: error }))
+          logger.warn(new Error("Failed to update gift", { cause: error }) as any)
           return { tag: "err", reason: "ERR_UPDATE_ITEM_FAILED_TO_STORAGE" }
         }
       },
@@ -135,7 +135,7 @@ export const giftMakerHistoryStore = create<Store>()(
           set(newState)
           return result
         } catch (error) {
-          logger.error(new Error("Failed to remove gift", { cause: error }))
+          logger.warn(new Error("Failed to remove gift", { cause: error }) as any)
           return { tag: "err", reason: "ERR_REMOVE_ITEM_FAILED_FROM_STORAGE" }
         }
       },

@@ -83,7 +83,7 @@ export const giftTakerRootMachine = setup({
   },
   actions: {
     logError: (_, event: { error: unknown }) => {
-      logger.error(event.error)
+      logger.warn(event.error as any)
     },
     setError: assign({
       error: (_, error: GiftTakerClaimingActorErrors) => error,

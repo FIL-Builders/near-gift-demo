@@ -69,7 +69,7 @@ export const NearWalletProvider: FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     init().catch((err) => {
-      logger.error(err)
+      logger.warn(err as any)
       alert("Failed to initialize NEAR wallet")
     })
   }, [init])

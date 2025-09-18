@@ -90,7 +90,7 @@ export const giftMakerSignActor = setup({
   },
   actions: {
     logError: (_, event: { error: unknown }) => {
-      logger.error(event.error)
+      logger.warn(event.error as any)
     },
     complete: ({ self }, output: GiftMakerSignActorOutput) => {
       self.send({ type: "COMPLETE", output })

@@ -65,7 +65,7 @@ export function parseMultiPayloadTransferMessage(
     const firstIntent = intents?.[0]
     return firstIntent && isTransferIntent(firstIntent) ? firstIntent : null
   } catch (e) {
-    logger.error(e)
+    logger.warn(e as any)
     return null
   }
 }
