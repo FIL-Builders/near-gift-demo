@@ -16,12 +16,18 @@ export default function AccountPage() {
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-3">
+      <div className="mt-6 grid grid-cols-3 gap-3">
         <Link href="/deposit" className="rounded-md bg-black px-4 py-2 text-white text-center">
           Deposit
         </Link>
         <Link href="/withdraw" className="rounded-md bg-black px-4 py-2 text-white text-center">
           Withdraw
+        </Link>
+        <Link
+          href="/gift-card/create-gift"
+          className="rounded-md bg-black px-4 py-2 text-white text-center"
+        >
+          Gift
         </Link>
       </div>
     </main>

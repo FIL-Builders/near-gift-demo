@@ -11,6 +11,7 @@ export function NavbarDesktop() {
   const { isActive } = useIsActiveLink()
 
   const isAccountActive = isActive(navigation.account)
+  const isGiftActive = isActive(navigation.gift, false)
   // Trade removed in learning edition
 
   return (
@@ -21,6 +22,9 @@ export function NavbarDesktop() {
         isActive={isAccountActive}
         href={navigation.account}
       />
+
+      {/* Gift */}
+      <NavItem label="Gift" isActive={isGiftActive} href={navigation.gift} />
 
       {/* Trade removed */}
     </nav>
