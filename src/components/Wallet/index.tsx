@@ -58,7 +58,7 @@ const ConnectWallet = () => {
               <Button
                 onClick={() => handlePasskey()}
                 size="4"
-                radius="medium"
+                radius="full"
                 variant="soft"
                 color="gray"
                 className="px-2.5"
@@ -80,7 +80,7 @@ const ConnectWallet = () => {
             <Button
               onClick={handleEthereum}
               size="4"
-              radius="medium"
+              radius="full"
               variant="soft"
               color="gray"
               className="px-2.5"
@@ -101,7 +101,7 @@ const ConnectWallet = () => {
             <Button
               onClick={handleNearWalletSelector}
               size="4"
-              radius="medium"
+              radius="full"
               variant="soft"
               color="gray"
               className="px-2.5"
