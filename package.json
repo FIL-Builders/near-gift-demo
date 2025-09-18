@@ -9,9 +9,7 @@
     "start": "next start",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
-    "prepare": "husky && ./scripts/gen-banned-near-address.sh",
-    "update-types": "supabase gen types --lang=typescript --local > src/types/database-generated.ts",
-    "db:setup:js": "node scripts/setup-db.js"
+    "prepare": "husky && ./scripts/gen-banned-near-address.sh"
   },
   "dependencies": {
     "@defuse-protocol/defuse-sdk": "^1.0.0-beta.1",
