@@ -464,11 +464,17 @@ export function GiftMakerForm({
           {formValues.imageCid && (
             <div className="max-w-md mx-auto">
               <div className="relative">
-                <img
-                  src={`https://gateway.lighthouse.storage/ipfs/${formValues.imageCid}`}
-                  alt="Gift memory preview"
-                  className="w-full h-48 object-cover rounded-lg border-2 border-sky-400 shadow-lg"
-                />
+                <a
+                  href={`https://gateway.lighthouse.storage/ipfs/${formValues.imageCid}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={`https://gateway.lighthouse.storage/ipfs/${formValues.imageCid}`}
+                    alt="Gift memory preview"
+                    className="w-full h-48 object-cover rounded-lg border-2 border-sky-400 shadow-lg"
+                  />
+                </a>
                 {/* Remove image button */}
                 <button
                   onClick={() => {
