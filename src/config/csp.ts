@@ -28,9 +28,6 @@ const cspConfig = {
     "'self'",
     "blob:",
     "https://*.near-intents.org",
-    "https://*.solswap.org",
-    "https://*.dogecoinswap.org",
-    "https://*.turboswap.org",
   ],
   "connect-src": [
     "'self'",

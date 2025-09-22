@@ -36,7 +36,7 @@ const ConnectWallet = () => {
     return (
       <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
         <Popover.Trigger>
-          <Button type={"button"} variant={"solid"} size={"2"} radius={"full"}>
+          <Button type={"button"} variant={"solid"} size={"2"} radius={"full"} color="blue">
             <Text weight="bold" wrap="nowrap">
               Sign in
             </Text>

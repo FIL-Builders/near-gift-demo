@@ -50,7 +50,7 @@ export function BlockMultiBalances({
           icon={
             <button
               type="button"
-              className="flex items-center gap-1 rounded-full bg-gray-300/50 px-2 py-0.5"
+              className="flex items-center gap-1 rounded-full bg-sky-200/50 px-2 py-0.5"
             >
               <div className="w-3 h-3 bg-[url('/static/images/process.gif')] bg-no-repeat bg-contain" />
               <span className="text-xs font-bold text-gray-11">

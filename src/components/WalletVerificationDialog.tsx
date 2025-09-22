@@ -116,14 +116,14 @@ function DefaultContent({
             size="4"
             type="button"
             variant="soft"
-            color="gray"
+            color="blue"
             onClick={onCancel}
           >
             Cancel
           </Button>
         </themes_AlertDialog.Cancel>
         <themes_AlertDialog.Action>
-          <Button size="4" type="button" onClick={onConfirm}>
+          <Button size="4" type="button" color="blue" onClick={onConfirm}>
             <Spinner loading={isVerifying} />
             {isVerifying ? "Checking..." : "Check Compatibility"}
           </Button>
@@ -194,14 +194,14 @@ function FailureContent({
             size="4"
             type="button"
             variant="soft"
-            color="gray"
+            color="blue"
             onClick={onCancel}
           >
             Sign out
           </Button>
         </themes_AlertDialog.Cancel>
         <themes_AlertDialog.Action>
-          <Button size="4" type="button" onClick={onConfirm}>
+          <Button size="4" type="button" color="blue" onClick={onConfirm}>
             <Spinner loading={isVerifying}>
               <ReloadIcon />
             </Spinner>

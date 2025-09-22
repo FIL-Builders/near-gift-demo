@@ -46,7 +46,7 @@ export function GiftHistoryWidget({
 
   return (
     <WidgetRoot>
-      <div className="widget-container flex flex-col gap-5">
+      <div className="w-full flex flex-col gap-5">
         <SwapWidgetProvider>
           <GiftHistory
             signerCredentials={signerCredentials}

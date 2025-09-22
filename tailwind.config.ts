@@ -329,6 +329,10 @@ const config: Config = {
           "url(/static/images/group-account-bringing.svg)",
         "card-vision-bringing--mobile":
           "url(/static/images/group-account-bringing--mobile.svg)",
+        "one": "url(/static/images/bgOne.svg)",
+        "two": "url(/static/images/bgTwo.svg)",
+        "three": "url(/static/images/bgThree.svg)",
+        "four": "url(/static/images/bgFour.svg)",
       },
     },
   },

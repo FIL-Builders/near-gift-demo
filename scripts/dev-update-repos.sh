@@ -9,7 +9,7 @@
 # Usage:
 # 1. Ensure you are on the 'main' branch of your local repository.
 # 2. Run this script to pull the latest changes and push them to the 
-#    NearIntents projects: near-intents, solana, dogecoinswap, and turboswap.
+#    NearIntents projects: near-intents
 #
 
 # Check if the current branch is 'main'
@@ -21,10 +21,4 @@ fi
 
 # Pull the latest changes from 'main'
 git pull origin main
-
-# Run one after the other: 
-git push origin main:solana
-git push origin main:dogecoinswap
-git push origin main:turboswap
-git push origin main:trumpswap
 

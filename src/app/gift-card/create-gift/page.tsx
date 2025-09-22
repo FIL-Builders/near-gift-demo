@@ -24,38 +24,42 @@ function CreateGiftContent() {
 
   return (
     <Paper>
-      <div className="flex flex-col items-center gap-8">
-        <GiftMakerWidget
-          tokenList={tokenList}
-          userAddress={userAddress}
-          chainType={userChainType}
-          signMessage={signMessage}
-          sendNearTransaction={async (tx) => {
-            const result = await signAndSendTransactions({ transactions: [tx] })
+      <div className="flex flex-col lg:flex-row gap-8 w-full h-screen py-8">
+        <div className="left-[50%] fixed w-full h-full">
+          <GiftMakerWidget
+            tokenList={tokenList}
+            userAddress={userAddress}
+            chainType={userChainType}
+            signMessage={signMessage}
+            sendNearTransaction={async (tx) => {
+              const result = await signAndSendTransactions({ transactions: [tx] })
 
-            if (typeof result === "string") {
-              return { txHash: result }
-            }
+              if (typeof result === "string") {
+                return { txHash: result }
+              }
 
-            const outcome = result[0]
-            if (!outcome) {
-              throw new Error("No outcome")
-            }
+              const outcome = result[0]
+              if (!outcome) {
+                throw new Error("No outcome")
+              }
 
-            return { txHash: outcome.transaction.hash }
-          }}
-          referral={referral}
-          createGiftIntent={async (payload) => createGiftIntent(payload)}
-          generateLink={(giftLinkData) => createGiftLink(giftLinkData)}
-          // initialToken omitted in learning edition
-          renderHostAppLink={renderAppLink}
-        />
-        <GiftHistoryWidget
-          tokenList={tokenList}
-          userAddress={state.isVerified ? state.address : undefined}
-          userChainType={state.chainType}
-          generateLink={(giftLinkData) => createGiftLink(giftLinkData)}
-        />
+              return { txHash: outcome.transaction.hash }
+            }}
+            referral={referral}
+            createGiftIntent={async (payload) => createGiftIntent(payload)}
+            generateLink={(giftLinkData) => createGiftLink(giftLinkData)}
+            // initialToken omitted in learning edition
+            renderHostAppLink={renderAppLink}
+          />
+        </div>
+        {/* <div className="flex-1 h-full">
+          <GiftHistoryWidget
+            tokenList={tokenList}
+            userAddress={state.isVerified ? state.address : undefined}
+            userChainType={state.chainType}
+            generateLink={(giftLinkData) => createGiftLink(giftLinkData)}
+          />
+        </div> */}
       </div>
     </Paper>
   )

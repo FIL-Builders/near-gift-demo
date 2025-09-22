@@ -31,14 +31,15 @@ export const ButtonCustom = ({
   switch (variant) {
     case "primary":
       radixButtonVariant = undefined
+      radixButtonColor = "blue"
       break
     case "secondary":
       radixButtonVariant = "outline"
-      radixButtonColor = "gray"
+      radixButtonColor = "blue"
       break
     case "base":
       radixButtonVariant = "solid"
-      radixButtonColor = "gray"
+      radixButtonColor = "blue"
       break
     case "danger":
       radixButtonVariant = "outline"

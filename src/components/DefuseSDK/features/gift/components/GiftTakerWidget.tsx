@@ -33,8 +33,12 @@ export function GiftTakerWidget(props: GiftTakerWidgetProps) {
   return (
     <WidgetRoot>
       <SwapWidgetProvider>
-        <div className="widget-container rounded-2xl bg-gray-1 p-5 shadow">
-          <GiftTakerScreens {...props} />
+        <div className="flex justify-center items-center max-h-screen p-4">
+          <div className="w-full max-w-2xl">
+            <div className="rounded-2xl bg-gray-1 p-5 shadow">
+              <GiftTakerScreens {...props} />
+            </div>
+          </div>
         </div>
       </SwapWidgetProvider>
     </WidgetRoot>

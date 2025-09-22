@@ -1,6 +1,6 @@
 import { X as CrossIcon } from "@phosphor-icons/react"
 import * as Dialog from "@radix-ui/react-dialog"
-import { Theme } from "@radix-ui/themes"
+import { Theme, VisuallyHidden } from "@radix-ui/themes"
 import clsx from "clsx"
 import { type PropsWithChildren, useCallback, useEffect, useState } from "react"
 
@@ -107,7 +107,9 @@ export function BaseModalDialog({
                   // Suppressing the warning about missing aria-describedby
                   aria-describedby={undefined}
                 >
-                  <Dialog.Title />
+                  <VisuallyHidden>
+                    <Dialog.Title>Modal Dialog</Dialog.Title>
+                  </VisuallyHidden>
 
                   {isDismissable && (
                     <Dialog.Close className="flex items-center justify-center absolute top-5 right-5 size-10 rounded-full hover:bg-gray-3 active:bg-gray-4">

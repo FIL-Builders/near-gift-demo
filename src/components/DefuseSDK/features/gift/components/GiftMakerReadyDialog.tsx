@@ -113,7 +113,12 @@ function SuccessDialog({
         message={
           context.parsed.message.length > 0
             ? context.parsed.message
-            : "Enjoy your gift!"
+            : ""
+        }
+        imageUrl={
+          context.parsed.imageCid
+            ? `https://gateway.lighthouse.storage/ipfs/${context.parsed.imageCid}`
+            : undefined
         }
       />
 
@@ -192,7 +197,7 @@ export function CancellationDialog({
       {snapshot?.matches("idleUnclaimable") ? (
         <>
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-full bg-red-4 flex justify-center items-center">
+            <div className="w-16 max-h-16 rounded-full bg-red-4 flex justify-center items-center">
               <WarningIcon weight="bold" className="size-7 text-red-a11" />
             </div>
           </div>

@@ -205,7 +205,7 @@ function PasskeyConnectionInfo({
         <button
           type="button"
           onClick={onSignOut}
-          className="w-[32px] h-[32px] flex justify-center items-center rounded-full bg-gray-a3"
+          className="w-[32px] h-[32px] flex justify-center items-center rounded-full"
         >
           <EnterIcon width={16} height={16} />
         </button>

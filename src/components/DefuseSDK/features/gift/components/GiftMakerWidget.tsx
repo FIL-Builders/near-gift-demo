@@ -9,7 +9,7 @@ export function GiftMakerWidget(props: GiftMakerWidgetProps) {
   return (
     <WidgetRoot>
       <SwapWidgetProvider>
-        <div className="widget-container rounded-2xl bg-gray-1 p-5 shadow">
+        <div className="w-1/2 h-full rounded-2xl p-5">
           <GiftMakerForm {...props} />
         </div>
       </SwapWidgetProvider>

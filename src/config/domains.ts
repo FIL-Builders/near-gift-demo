@@ -1,14 +1,6 @@
 export type WhitelabelTemplateValue =
   | "near-intents"
-  | "solswap"
-  | "dogecoinswap"
-  | "turboswap"
-  | "trumpswap"
 
 export const domains: Record<string, WhitelabelTemplateValue> = {
-  "near-intents.org": "near-intents",
-  "solswap.org": "solswap",
-  "dogecoinswap.org": "dogecoinswap",
-  "turboswap.org": "turboswap",
-  "trump-swap.org": "trumpswap",
+  "near-intents.org": "near-intents", 
 }

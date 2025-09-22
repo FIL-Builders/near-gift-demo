@@ -6,7 +6,6 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import type { ActorRefFrom, PromiseActorLogic } from "xstate"
 import { AuthGate } from "../../../components/AuthGate"
 import { BlockMultiBalances } from "../../../components/Block/BlockMultiBalances"
-import { ButtonCustom } from "../../../components/Button/ButtonCustom"
 import type { ModalSelectAssetsPayload } from "../../../components/Modal/ModalSelectAssets"
 import { SelectAssets } from "../../../components/SelectAssets"
 import type { SignerCredentials } from "../../../core/formatters"
@@ -89,6 +88,7 @@ export function GiftMakerForm({
   renderHostAppLink,
   createGiftIntent,
 }: GiftMakerWidgetProps) {
+  const [currentStep, setCurrentStep] = useState(1)
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState<number | null>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
@@ -97,9 +97,9 @@ export function GiftMakerForm({
     () =>
       userAddress != null && chainType != null
         ? {
-            credential: userAddress,
-            credentialType: chainType,
-          }
+          credential: userAddress,
+          credentialType: chainType,
+        }
         : null,
     [userAddress, chainType]
   )
@@ -167,7 +167,7 @@ export function GiftMakerForm({
     const _payload = payload as ModalSelectAssetsPayload
     const token = _payload[fieldName || "token"]
     if (modalType === ModalType.MODAL_SELECT_ASSETS && fieldName && token) {
-      ;(formValuesRef as any).trigger.updateToken({ value: token })
+      ; (formValuesRef as any).trigger.updateToken({ value: token })
     }
   }, [payload, formValuesRef])
 
@@ -205,8 +205,8 @@ export function GiftMakerForm({
         rootActorRef,
         (state) =>
           state.children.signRef as
-            | undefined
-            | ActorRefFrom<typeof giftMakerSignActor>
+          | undefined
+          | ActorRefFrom<typeof giftMakerSignActor>
       ),
       (state) => {
         if (state) {
@@ -257,7 +257,7 @@ export function GiftMakerForm({
 
   const handleSetMaxValue = async () => {
     if (tokenBalance != null) {
-      ;(formValuesRef as any).trigger.updateAmount({
+      ; (formValuesRef as any).trigger.updateAmount({
         value: formatTokenValue(tokenBalance.amount, tokenBalance.decimals),
       })
     }
@@ -265,7 +265,7 @@ export function GiftMakerForm({
 
   const handleSetHalfValue = async () => {
     if (tokenBalance != null) {
-      ;(formValuesRef as any).trigger.updateAmount({
+      ; (formValuesRef as any).trigger.updateAmount({
         value: formatTokenValue(
           tokenBalance.amount / 2n,
           tokenBalance.decimals
@@ -276,6 +276,27 @@ export function GiftMakerForm({
 
   const balanceAmount = tokenBalance?.amount ?? 0n
   const disabled = tokenBalance?.amount === 0n
+
+  // Step navigation helpers
+  const canProceedToStep2 = () => {
+    return formValues.amount && formValues.amount !== "0" && formValues.token && !balanceInsufficient
+  }
+
+  const canProceedToStep3 = () => {
+    return true // Image upload is optional
+  }
+
+  const nextStep = () => {
+    if (currentStep < 3) {
+      setCurrentStep(currentStep + 1)
+    }
+  }
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1)
+    }
+  }
 
   const onUploadChange = async (files: FileList | null) => {
     if (!files || files.length === 0) return
@@ -299,7 +320,7 @@ export function GiftMakerForm({
               ).toFixed(2)
             )
           if (!Number.isNaN(pct)) setUploadProgress(pct)
-        } catch {}
+        } catch { }
       }
       const output = await lighthouse.upload(
         files,
@@ -309,7 +330,7 @@ export function GiftMakerForm({
       )
       const cid = output?.data?.Hash as string | undefined
       if (!cid) throw new Error("Upload failed: no CID returned")
-      ;(formValuesRef as any).trigger.updateImageCid({ value: cid })
+        ; (formValuesRef as any).trigger.updateImageCid({ value: cid })
       setUploadProgress(100)
     } catch (e) {
       setUploadError(e instanceof Error ? e.message : "Upload failed")
@@ -317,6 +338,186 @@ export function GiftMakerForm({
       setUploading(false)
     }
   }
+
+  // Step 1: Select currency and enter amount
+  const renderStep1 = () => (
+    <div className="flex flex-col gap-6 w-full">
+      <div className="flex flex-col gap-4">
+        <h3 className="text-5xl font-bold text-sky-600 -mt-44">SET GIFT VALUE</h3>
+        <TokenAmountInputCard
+          variant="2"
+          labelSlot={
+            <label
+              htmlFor="gift-amount-in"
+              className="font-bold text-label text-sm"
+            >
+              Gift amount
+            </label>
+          }
+          inputSlot={
+            <TokenAmountInputCard.Input
+              id="gift-amount-in"
+              name="amount"
+              value={formValues.amount}
+              onChange={(e) =>
+                (formValuesRef as any).trigger.updateAmount({
+                  value: e.target.value,
+                })
+              }
+              disabled={processing}
+            />
+          }
+          tokenSlot={
+            <SelectAssets
+              selected={formValues.token ?? undefined}
+              handleSelect={() =>
+                openModalSelectAssets("token", formValues.token)
+              }
+            />
+          }
+          balanceSlot={
+            <BlockMultiBalances
+              balance={balanceAmount}
+              decimals={tokenBalance?.decimals ?? 0}
+              className={clsx(
+                "!static",
+                tokenBalance == null && "invisible"
+              )}
+              maxButtonSlot={
+                <BlockMultiBalances.DisplayMaxButton
+                  onClick={handleSetMaxValue}
+                  balance={balanceAmount}
+                  disabled={disabled}
+                />
+              }
+              halfButtonSlot={
+                <BlockMultiBalances.DisplayHalfButton
+                  onClick={handleSetHalfValue}
+                  balance={balanceAmount}
+                  disabled={disabled}
+                />
+              }
+            />
+          }
+          priceSlot={
+            <TokenAmountInputCard.DisplayPrice>
+              {usdAmount !== null && usdAmount > 0
+                ? formatUsdAmount(usdAmount)
+                : null}
+            </TokenAmountInputCard.DisplayPrice>
+          }
+        />
+      </div>
+
+    </div>
+  )
+
+  // Step 2: Upload image
+  const renderStep2 = () => (
+    <div className="flex flex-col gap-6 w-full">
+      <div className="flex flex-col gap-4">
+        <h3 className="text-5xl font-bold text-sky-600 -mt-44">Attach Memory</h3>
+        <div className="w-full">
+
+
+          {/* Show upload area only if no image is uploaded */}
+          {!formValues.imageCid && (
+            <div className="max-w-md mx-auto rounded-lg overflow-hidden">
+              <div className="w-full p-3">
+                <div className="relative h-48 rounded-lg border-2 border-sky-400 bg-gray-50 flex justify-center items-center shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                  <div className="absolute flex flex-col items-center">
+                    <svg className="w-16 h-16 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <span className="block text-gray-500 font-semibold">
+                      Drag & drop your files here
+                    </span>
+                    <span className="block text-gray-400 font-normal mt-1">
+                      or click to upload
+                    </span>
+                  </div>
+
+                  <input
+                    id="gift-image-upload"
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => onUploadChange(e.target.files)}
+                    disabled={processing || uploading}
+                    className="h-full w-full opacity-0 cursor-pointer"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {uploading && (
+            <div className="text-xs text-gray-600 mt-2">
+              Uploading… {uploadProgress != null ? `${uploadProgress}%` : ""}
+            </div>
+          )}
+          {uploadError && (
+            <div className="text-xs text-red-600 mt-2">{uploadError}</div>
+          )}
+
+          {/* Show uploaded image */}
+          {formValues.imageCid && (
+            <div className="max-w-md mx-auto">
+              <div className="relative">
+                <img
+                  src={`https://gateway.lighthouse.storage/ipfs/${formValues.imageCid}`}
+                  alt="Gift memory preview"
+                  className="w-full h-48 object-cover rounded-lg border-2 border-sky-400 shadow-lg"
+                />
+                {/* Remove image button */}
+                <button
+                  onClick={() => {
+                    (formValuesRef as any).trigger.updateImageCid({ value: "" })
+                    if (fileInputRef.current) {
+                      fileInputRef.current.value = ""
+                    }
+                  }}
+                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600 transition-colors"
+                  title="Remove image"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+    </div>
+  )
+
+  // Step 3: Create gift link and share
+  const renderStep3 = () => (
+    <div className="flex flex-col gap-6 w-full">
+      <div className="flex flex-col gap-4">
+        <h3 className="text-5xl font-bold text-sky-600 -mt-44">Wrap Gift</h3>
+        <div className="text-center text-sm text-gray-600">
+          Review your gift details and create the shareable link
+        </div>
+
+        {/* Gift Summary */}
+        <div className="w-full border border-gray-200 rounded-lg p-4">
+          <div className="text-sm">
+            <div className="flex justify-between mb-2">
+              <span>AMOUNT:</span>
+              <span className="font-medium">{formValues.amount} {formValues.token?.symbol}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {processingLabel && (
+        <div className="text-xs text-gray-600 text-center">{processingLabel}</div>
+      )}
+    </div>
+  )
 
   return (
     <div className="flex flex-col">
@@ -330,177 +531,60 @@ export function GiftMakerForm({
           />
         )}
 
-      <GiftHeader title="Share gift">
-        <GiftDescription
-          description="Send assets to your friends and help them get started on NEAR
-            Intents, hassle-free."
-        />
-      </GiftHeader>
-
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-
-          if (signerCredentials != null) {
-            rootActorRef.send({
-              type: "REQUEST_SIGN",
-              signMessage,
-              signerCredentials,
-            })
-          }
-        }}
-        className="flex flex-col gap-5"
-      >
-        <div className="flex flex-col items-center">
-          <div className="flex flex-col gap-3">
-            <TokenAmountInputCard
-              variant="2"
-              labelSlot={
-                <label
-                  htmlFor="gift-amount-in"
-                  className="font-bold text-label text-sm"
-                >
-                  Gift amount
-                </label>
-              }
-              inputSlot={
-                <TokenAmountInputCard.Input
-                  id="gift-amount-in"
-                  name="amount"
-                  value={formValues.amount}
-                  onChange={(e) =>
-                    (formValuesRef as any).trigger.updateAmount({
-                      value: e.target.value,
-                    })
-                  }
-                  disabled={processing}
-                />
-              }
-              tokenSlot={
-                <SelectAssets
-                  selected={formValues.token ?? undefined}
-                  handleSelect={() =>
-                    openModalSelectAssets("token", formValues.token)
-                  }
-                />
-              }
-              balanceSlot={
-                <BlockMultiBalances
-                  balance={balanceAmount}
-                  decimals={tokenBalance?.decimals ?? 0}
-                  className={clsx(
-                    "!static",
-                    tokenBalance == null && "invisible"
-                  )}
-                  maxButtonSlot={
-                    <BlockMultiBalances.DisplayMaxButton
-                      onClick={handleSetMaxValue}
-                      balance={balanceAmount}
-                      disabled={disabled}
-                    />
-                  }
-                  halfButtonSlot={
-                    <BlockMultiBalances.DisplayHalfButton
-                      onClick={handleSetHalfValue}
-                      balance={balanceAmount}
-                      disabled={disabled}
-                    />
-                  }
-                />
-              }
-              priceSlot={
-                <TokenAmountInputCard.DisplayPrice>
-                  {usdAmount !== null && usdAmount > 0
-                    ? formatUsdAmount(usdAmount)
-                    : null}
-                </TokenAmountInputCard.DisplayPrice>
-              }
-            />
-          </div>
-          <div className="w-full mt-4">
-            <GiftMessageInput
-              inputSlot={
-                <GiftMessageInput.Input
-                  id="gift-message"
-                  name="message"
-                  value={formValues.message}
-                  onChange={(e) =>
-                    (formValuesRef as any).trigger.updateMessage({
-                      value: e.target.value,
-                    })
-                  }
-                  maxLength={MAX_MESSAGE_LENGTH}
-                />
-              }
-              countSlot={
-                formValues.message.length > 0 ? (
-                  <GiftMessageInput.DisplayCount
-                    count={MAX_MESSAGE_LENGTH - formValues.message.length}
-                  />
-                ) : null
-              }
-            />
-          </div>
-
-          {/* Optional Image Upload */}
-          <div className="w-full mt-4">
-            <label
-              htmlFor="gift-image-upload"
-              className="font-bold text-label text-sm mb-2 inline-block"
-            >
-              Attach a memory photo (optional)
-            </label>
-            <div className="flex items-center gap-3">
-              <input
-                id="gift-image-upload"
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={(e) => onUploadChange(e.target.files)}
-                disabled={processing || uploading}
-              />
-            </div>
-            {uploading && (
-              <div className="text-xs text-gray-11 mt-2">
-                Uploading… {uploadProgress != null ? `${uploadProgress}%` : ""}
-              </div>
-            )}
-            {uploadError && (
-              <div className="text-xs text-red-11 mt-2">{uploadError}</div>
-            )}
-            {formValues.imageCid && (
-              <div className="mt-3 text-xs text-gray-11 break-all">
-                Uploaded CID: {formValues.imageCid}
-                <div className="mt-2">
-                  <img
-                    src={`https://gateway.lighthouse.storage/ipfs/${formValues.imageCid}`}
-                    alt="Gift memory preview"
-                    className="max-h-40 rounded"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
+      {/* Clean container without background */}
+      <div className="w-full max-w-md flex flex-col items-start gap-6 p-6 flex-1">
+        {/* Render current step */}
+        <div className="w-full pt-52 ml-0 flex justify-center text-center items-center flex-col flex-1 min-h-screen">
+          {currentStep === 1 && renderStep1()}
+          {currentStep === 2 && renderStep2()}
+          {currentStep === 3 && renderStep3()}
         </div>
+      </div>
 
-        <AuthGate
-          renderHostAppLink={renderHostAppLink}
-          shouldRender={isLoggedIn}
-        >
-          <ButtonCustom
-            type="submit"
-            size="lg"
-            variant={processing ? "secondary" : "primary"}
-            isLoading={processing}
-            disabled={balanceInsufficient || processing}
-          >
-            {getButtonText(balanceInsufficient, editing, processing)}
-          </ButtonCustom>
-          {processingLabel && (
-            <div className="mt-2 text-xs text-gray-11">{processingLabel}</div>
+      {/* Fixed navigation buttons at bottom */}
+      <div className="fixed bottom-6 left-[67%] transform -translate-x-1/2 w-full max-w-md px-6">
+        <div className="flex gap-3">
+          {currentStep > 1 && (
+            <button
+              onClick={prevStep}
+              className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 hover:bg-gray-300 rounded-lg font-medium transition-colors flex items-center justify-center"
+            >
+              <span className="text-2xl font-bold">BACK</span>
+            </button>
           )}
-        </AuthGate>
-      </form>
+          {currentStep < 3 ? (
+            <button
+              onClick={nextStep}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg font-medium transition-colors"
+              disabled={currentStep === 1 ? !canProceedToStep2() : !canProceedToStep3()}
+            >
+              <span className="text-2xl font-bold">NEXT</span>
+            </button>
+          ) : (
+            <AuthGate
+              renderHostAppLink={renderHostAppLink}
+              shouldRender={isLoggedIn}
+            >
+              <button
+                onClick={() => {
+                  if (signerCredentials != null) {
+                    rootActorRef.send({
+                      type: "REQUEST_SIGN",
+                      signMessage,
+                      signerCredentials,
+                    })
+                  }
+                }}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg font-medium transition-colors"
+                disabled={balanceInsufficient || processing}
+              >
+                <span className="text-2xl font-bold">{processing ? "WRAPPING" : "CREATE GIFT"}</span>
+              </button>
+            </AuthGate>
+          )}
+        </div>
+      </div>
+
       {error != null && (
         <div className="mt-2">
           <ErrorReason reason={error.reason} />

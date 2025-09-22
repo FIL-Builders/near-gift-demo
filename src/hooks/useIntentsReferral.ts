@@ -4,10 +4,6 @@ import { useContext } from "react"
 
 export const referralMap: Record<WhitelabelTemplateValue, string> = {
   "near-intents": "near-intents.intents-referral.near",
-  solswap: "solswap.intents-referral.near",
-  dogecoinswap: "dogecoinswap.intents-referral.near",
-  turboswap: "turboswap.intents-referral.near",
-  trumpswap: "trumpswap.intents-referral.near",
 }
 
 export function useIntentsReferral() {

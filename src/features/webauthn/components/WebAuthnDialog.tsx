@@ -45,6 +45,7 @@ export function WebAuthnDialog() {
               type="button"
               onClick={() => webauthnUI.signIn()}
               size="4"
+              color="blue"
               className="font-bold"
             >
               <Spinner loading={webauthnUI.isSigningIn} />
@@ -109,6 +110,7 @@ export function WebAuthnDialog() {
               type="submit"
               size="4"
               variant="outline"
+              color="blue"
               className="font-bold"
             >
               <Spinner loading={webauthnUI.isCreating} />

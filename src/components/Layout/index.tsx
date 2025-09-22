@@ -18,21 +18,7 @@ const Layout: React.FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header
-        navbarSlot={
-          <Header.DisplayNavbar>
-            <NavbarDesktop />
-          </Header.DisplayNavbar>
-        }
-        depositSlot={
-          <Header.DepositSlot>
-            <NavbarDeposit />
-          </Header.DepositSlot>
-        }
-      />
       <Main>{children}</Main>
-      <Footer />
-      <NavbarMobile />
       <PageBackground />
       <WalletVerificationProvider />
     </div>

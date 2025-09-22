@@ -21,9 +21,9 @@ export function TokenAmountInputCard({
   return (
     <div
       className={cn(
-        "flex flex-col gap-2.5 rounded-lg border border-border bg-gray-2 p-4",
+        "flex flex-col gap-2.5 rounded-lg border border-border -2 p-4",
         variant === "2" &&
-          "rounded-[10px] border-0 bg-gray-3 hover:bg-gray-4 focus-within:bg-gray-4"
+          "rounded-[10px] border-0"
       )}
     >
       <div className="flex items-center justify-between gap-4">
