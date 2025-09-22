@@ -16,7 +16,7 @@ export default function AccountPage() {
         </div>
       </div>
 
-      {address == null ? <> <ConnectWallet /></> : <div className="mt-8 grid grid-cols-2 gap-6">
+      {address == null ? <> </> : <div className="mt-8 grid grid-cols-2 gap-6">
         <button
           className="relative text-center flex items-center px-8 py-4 overflow-hidden font-medium transition-all bg-sky-500 rounded-md group text-lg"
         >

@@ -17,7 +17,7 @@ function CreateGiftContent() {
   return (
     <Paper>
       <div className="flex justify-center items-center min-h-screen p-4">
-        <div className="w-full max-w-2xl">
+        <div className="w-full max-w-xl fixed right-10 mr-36 mt-64 flex justify-end items-end">
           <GiftHistoryWidget
             tokenList={tokenList}
             userAddress={state.isVerified ? state.address : undefined}
