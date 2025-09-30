@@ -4,9 +4,10 @@ export const navigation = {
   deposit: "/deposit",
   withdraw: "/withdraw",
   gift: "/gift-card/create-gift",
+  myGifts: "/gift-card/my-gifts",
   otc: "/otc/create-order",
   jobs: "/jobs",
-} satisfies Record<AppRoutes, string>
+} satisfies Record<AppRoutes, string>;
 
 export type AppRoutes =
   | "home"
@@ -14,5 +15,6 @@ export type AppRoutes =
   | "deposit"
   | "withdraw"
   | "gift"
+  | "myGifts"
   | "otc"
-  | "jobs"
+  | "jobs";

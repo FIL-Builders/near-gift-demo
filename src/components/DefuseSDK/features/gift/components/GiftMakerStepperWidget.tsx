@@ -51,8 +51,6 @@ import { FileUploadButton } from "./FileUploadButton";
 import { GiftMakerReadyDialog } from "./GiftMakerReadyDialog";
 import { GiftMessageInput } from "./GiftMessageInput";
 import { ErrorReason } from "./shared/ErrorReason";
-import { GiftDescription } from "./shared/GiftDescription";
-import { GiftHeader } from "./shared/GiftHeader";
 
 export type GiftMakerWidgetProps = {
   /** List of available tokens for trading */
@@ -290,7 +288,6 @@ function GiftMakerStepperContent({
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const signerCredentials: SignerCredentials | null = useMemo(
     () =>

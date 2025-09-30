@@ -1,26 +1,26 @@
-"use client"
-import { GiftHistoryWidget } from "@src/components/DefuseSDK/features/gift/components/GiftHistoryWidget"
-import { GiftMakerStepperWidget } from "@src/components/DefuseSDK/features/gift/components/GiftMakerStepperWidget"
-import Paper from "@src/components/Paper"
-import { LIST_TOKENS } from "@src/constants/tokens"
-import { useConnectWallet } from "@src/hooks/useConnectWallet"
-import { useIntentsReferral } from "@src/hooks/useIntentsReferral"
-import { useTokenList } from "@src/hooks/useTokenList"
-import { useWalletAgnosticSignMessage } from "@src/hooks/useWalletAgnosticSignMessage"
-import { useNearWallet } from "@src/providers/NearWalletProvider"
-import { renderAppLink } from "@src/utils/renderAppLink"
-import { Suspense } from "react"
-import { createGiftIntent, createGiftLink } from "../_utils/link"
+"use client";
+
+import { GiftMakerStepperWidget } from "@src/components/DefuseSDK/features/gift/components/GiftMakerStepperWidget";
+import Paper from "@src/components/Paper";
+import { LIST_TOKENS } from "@src/constants/tokens";
+import { useConnectWallet } from "@src/hooks/useConnectWallet";
+import { useIntentsReferral } from "@src/hooks/useIntentsReferral";
+import { useTokenList } from "@src/hooks/useTokenList";
+import { useWalletAgnosticSignMessage } from "@src/hooks/useWalletAgnosticSignMessage";
+import { useNearWallet } from "@src/providers/NearWalletProvider";
+import { renderAppLink } from "@src/utils/renderAppLink";
+import { Suspense } from "react";
+import { createGiftIntent, createGiftLink } from "../_utils/link";
 
 function CreateGiftContent() {
-  const { state } = useConnectWallet()
-  const tokenList = useTokenList(LIST_TOKENS)
-  const signMessage = useWalletAgnosticSignMessage()
-  const referral = useIntentsReferral()
-  const { signAndSendTransactions } = useNearWallet()
+  const { state } = useConnectWallet();
+  const tokenList = useTokenList(LIST_TOKENS);
+  const signMessage = useWalletAgnosticSignMessage();
+  const referral = useIntentsReferral();
+  const { signAndSendTransactions } = useNearWallet();
 
-  const userAddress = state.isVerified ? state.address : undefined
-  const userChainType = state.chainType
+  const userAddress = state.isVerified ? state.address : undefined;
+  const userChainType = state.chainType;
 
   return (
     <Paper>
@@ -31,18 +31,20 @@ function CreateGiftContent() {
           chainType={userChainType}
           signMessage={signMessage}
           sendNearTransaction={async (tx) => {
-            const result = await signAndSendTransactions({ transactions: [tx] })
+            const result = await signAndSendTransactions({
+              transactions: [tx],
+            });
 
             if (typeof result === "string") {
-              return { txHash: result }
+              return { txHash: result };
             }
 
-            const outcome = result[0]
+            const outcome = result[0];
             if (!outcome) {
-              throw new Error("No outcome")
+              throw new Error("No outcome");
             }
 
-            return { txHash: outcome.transaction.hash }
+            return { txHash: outcome.transaction.hash };
           }}
           referral={referral}
           createGiftIntent={async (payload) => createGiftIntent(payload)}
@@ -50,20 +52,14 @@ function CreateGiftContent() {
           // initialToken omitted in learning edition
           renderHostAppLink={renderAppLink}
         />
-        <GiftHistoryWidget
-          tokenList={tokenList}
-          userAddress={state.isVerified ? state.address : undefined}
-          userChainType={state.chainType}
-          generateLink={(giftLinkData) => createGiftLink(giftLinkData)}
-        />
       </div>
     </Paper>
-  )
+  );
 }
 export default function CreateGiftPage() {
   return (
     <Suspense fallback={null}>
       <CreateGiftContent />
     </Suspense>
-  )
+  );
 }

@@ -1,14 +1,14 @@
-import { Theme } from "@radix-ui/themes"
-import type { Metadata, Viewport } from "next"
-import type { ReactNode } from "react"
-import { Suspense } from "react"
-import ClientProviders from "./ClientProviders"
+import { Theme } from "@radix-ui/themes";
+import type { Metadata, Viewport } from "next";
+import type { ReactNode } from "react";
+import { Suspense } from "react";
+import ClientProviders from "./ClientProviders";
 
 // Client providers are imported as a client component boundary
 
-import "@radix-ui/themes/styles.css"
-import "../styles/global.scss"
-import { VERCEL_PROJECT_PRODUCTION_URL } from "@src/utils/environment"
+import "@radix-ui/themes/styles.css";
+import "../styles/global.scss";
+import { VERCEL_PROJECT_PRODUCTION_URL } from "@src/utils/environment";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -16,7 +16,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-}
+};
 
 export const metadata: Metadata = {
   metadataBase: VERCEL_PROJECT_PRODUCTION_URL,
@@ -27,17 +27,17 @@ export const metadata: Metadata = {
     apple: "/favicons/near-intents/apple-touch-icon.png",
   },
   manifest: "/favicons/near-intents/site.webmanifest",
-}
+};
 
 const RootLayout = async ({
   children,
 }: Readonly<{
-  children?: ReactNode
+  children?: ReactNode;
 }>) => {
   return (
     <html lang="en" suppressHydrationWarning className={"tmpl-near-intents"}>
       <body>
-        <Theme accentColor="orange" radius="full">
+        <Theme accentColor="green" radius="full">
           <Suspense fallback={null}>
             <ClientProviders>{children}</ClientProviders>
           </Suspense>
@@ -45,7 +45,7 @@ const RootLayout = async ({
       </body>
       {/* Removed Helpscout beacon */}
     </html>
-  )
-}
+  );
+};
 
-export default RootLayout
+export default RootLayout;
