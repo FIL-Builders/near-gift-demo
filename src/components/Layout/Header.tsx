@@ -1,21 +1,18 @@
-"use client"
-import Logo from "@src/components/Logo"
-import Settings from "@src/components/Settings"
-import ConnectWallet from "@src/components/Wallet"
-import { FeatureFlagsContext } from "@src/providers/FeatureFlagsProvider"
-import type React from "react"
-import { type ReactNode, useContext } from "react"
-import styles from "./Header.module.css"
+"use client";
+import Logo from "@src/components/Logo";
+import Settings from "@src/components/Settings";
+import ConnectWallet from "@src/components/Wallet";
+import type React from "react";
+import { type ReactNode } from "react";
+import styles from "./Header.module.css";
 
 export function Header({
   navbarSlot,
   depositSlot,
 }: {
-  navbarSlot?: ReactNode
-  depositSlot?: ReactNode
+  navbarSlot?: ReactNode;
+  depositSlot?: ReactNode;
 }) {
-  const { whitelabelTemplate } = useContext(FeatureFlagsContext)
-
   return (
     <>
       <header
@@ -40,26 +37,26 @@ export function Header({
       </header>
       <div className="block md:hidden h-[56px]" />
     </>
-  )
+  );
 }
 
 Header.DisplayNavbar = function DisplayNavbar({
   children,
 }: {
-  children: ReactNode
+  children: ReactNode;
 }) {
-  return <div className="hidden md:flex flex-1 justify-center">{children}</div>
-}
+  return <div className="hidden md:flex flex-1 justify-center">{children}</div>;
+};
 
 Header.DepositSlot = function DepositSlot({
   children,
 }: {
-  children: ReactNode
+  children: ReactNode;
 }) {
   return (
     <div className="hidden md:flex items-center justify-between">
       {children}
       <div className="h-[20px] w-[1px] bg-gray-5 ml-4" />
     </div>
-  )
-}
+  );
+};

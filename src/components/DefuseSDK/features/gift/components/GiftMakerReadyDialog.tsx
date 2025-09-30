@@ -1,33 +1,35 @@
+"use client";
+
 import {
   Check as CheckIcon,
   Copy as CopyIcon,
   Warning as WarningIcon,
-} from "@phosphor-icons/react"
-import { Button, Dialog, Spinner } from "@radix-ui/themes"
-import type { SignerCredentials } from "@src/components/DefuseSDK/core/formatters"
-import { assert } from "@src/components/DefuseSDK/utils/assert"
-import { useSelector } from "@xstate/react"
-import { useCallback } from "react"
-import type { ActorRefFrom } from "xstate"
-import { ButtonCustom } from "../../../components/Button/ButtonCustom"
-import { Copy } from "../../../components/IntentCard/CopyButton"
-import { BaseModalDialog } from "../../../components/Modal/ModalDialog"
-import type { giftMakerReadyActor } from "../actors/giftMakerReadyActor"
-import type { GiftInfo } from "../actors/shared/getGiftInfo"
-import type { giftClaimActor } from "../actors/shared/giftClaimActor"
-import { giftMakerHistoryStore } from "../stores/giftMakerHistory"
-import type { GenerateLink } from "../types/sharedTypes"
-import { ShareableGiftImage } from "./ShareableGiftImage"
-import { ErrorReason } from "./shared/ErrorReason"
-import { GiftDescription } from "./shared/GiftDescription"
-import { GiftHeader } from "./shared/GiftHeader"
+} from "@phosphor-icons/react";
+import { Button, Dialog, Spinner } from "@radix-ui/themes";
+import type { SignerCredentials } from "@src/components/DefuseSDK/core/formatters";
+import { assert } from "@src/components/DefuseSDK/utils/assert";
+import { useSelector } from "@xstate/react";
+import { useCallback } from "react";
+import type { ActorRefFrom } from "xstate";
+import { ButtonCustom } from "../../../components/Button/ButtonCustom";
+import { Copy } from "../../../components/IntentCard/CopyButton";
+import { BaseModalDialog } from "../../../components/Modal/ModalDialog";
+import type { giftMakerReadyActor } from "../actors/giftMakerReadyActor";
+import type { GiftInfo } from "../actors/shared/getGiftInfo";
+import type { giftClaimActor } from "../actors/shared/giftClaimActor";
+import { giftMakerHistoryStore } from "../stores/giftMakerHistory";
+import type { GenerateLink } from "../types/sharedTypes";
+import { ShareableGiftImage } from "./ShareableGiftImage";
+import { ErrorReason } from "./shared/ErrorReason";
+import { GiftDescription } from "./shared/GiftDescription";
+import { GiftHeader } from "./shared/GiftHeader";
 
 type GiftMakerReadyDialogProps = {
-  readyGiftRef: ActorRefFrom<typeof giftMakerReadyActor>
-  generateLink: GenerateLink
-  signerCredentials: SignerCredentials
-  onClose?: () => void
-}
+  readyGiftRef: ActorRefFrom<typeof giftMakerReadyActor>;
+  generateLink: GenerateLink;
+  signerCredentials: SignerCredentials;
+  onClose?: () => void;
+};
 
 export function GiftMakerReadyDialog({
   readyGiftRef,
@@ -43,7 +45,7 @@ export function GiftMakerReadyDialog({
         | ActorRefFrom<typeof giftClaimActor>,
       giftInfo: state.context.giftInfo,
     })
-  )
+  );
   return (
     <>
       <SuccessDialog
@@ -57,7 +59,7 @@ export function GiftMakerReadyDialog({
         signerCredentials={signerCredentials}
       />
     </>
-  )
+  );
 }
 
 function SuccessDialog({
@@ -65,35 +67,35 @@ function SuccessDialog({
   generateLink,
   onClose,
 }: {
-  readyGiftRef: ActorRefFrom<typeof giftMakerReadyActor>
-  generateLink: GenerateLink
-  onClose?: () => void
+  readyGiftRef: ActorRefFrom<typeof giftMakerReadyActor>;
+  generateLink: GenerateLink;
+  onClose?: () => void;
 }) {
   const { context } = useSelector(readyGiftRef, (state) => ({
     context: state.context,
-  }))
+  }));
 
   const finish = useCallback(() => {
-    readyGiftRef.send({ type: "FINISH" })
-    onClose?.()
-  }, [readyGiftRef, onClose])
+    readyGiftRef.send({ type: "FINISH" });
+    onClose?.();
+  }, [readyGiftRef, onClose]);
 
   const cancelGift = useCallback(() => {
-    readyGiftRef.send({ type: "CANCEL_GIFT" })
-  }, [readyGiftRef])
+    readyGiftRef.send({ type: "CANCEL_GIFT" });
+  }, [readyGiftRef]);
 
   const copyGiftLink = useCallback(() => {
     return generateLink({
       secretKey: context.giftInfo.secretKey,
       message: context.parsed.message,
       iv: context.iv,
-    })
+    });
   }, [
     generateLink,
     context.giftInfo.secretKey,
     context.parsed.message,
     context.iv,
-  ])
+  ]);
 
   return (
     <BaseModalDialog open onClose={finish} isDismissable>
@@ -148,13 +150,13 @@ function SuccessDialog({
         </ButtonCustom>
       </div>
     </BaseModalDialog>
-  )
+  );
 }
 
 export interface CancellationDialogProps {
-  actorRef: ActorRefFrom<typeof giftClaimActor> | undefined | null
-  giftInfo: GiftInfo
-  signerCredentials: SignerCredentials
+  actorRef: ActorRefFrom<typeof giftClaimActor> | undefined | null;
+  giftInfo: GiftInfo;
+  signerCredentials: SignerCredentials;
 }
 
 export function CancellationDialog({
@@ -162,26 +164,26 @@ export function CancellationDialog({
   giftInfo,
   signerCredentials,
 }: CancellationDialogProps) {
-  const snapshot = useSelector(actorRef ?? undefined, (state) => state)
+  const snapshot = useSelector(actorRef ?? undefined, (state) => state);
 
   const abortCancellation = useCallback(() => {
-    actorRef?.send({ type: "ABORT_CLAIM" })
-  }, [actorRef])
+    actorRef?.send({ type: "ABORT_CLAIM" });
+  }, [actorRef]);
 
   const ackCancellationImpossible = useCallback(() => {
-    actorRef?.send({ type: "ACK_CLAIM_IMPOSSIBLE" })
-    assert(giftInfo.secretKey, "giftInfo.secretKey is not set")
+    actorRef?.send({ type: "ACK_CLAIM_IMPOSSIBLE" });
+    assert(giftInfo.secretKey, "giftInfo.secretKey is not set");
     giftMakerHistoryStore
       .getState()
-      .removeGift(giftInfo.secretKey, signerCredentials)
-  }, [actorRef, giftInfo, signerCredentials])
+      .removeGift(giftInfo.secretKey, signerCredentials);
+  }, [actorRef, giftInfo, signerCredentials]);
 
   const confirmCancellation = useCallback(() => {
     actorRef?.send({
       type: "CONFIRM_CLAIM",
       params: { giftInfo, signerCredentials },
-    })
-  }, [actorRef, giftInfo, signerCredentials])
+    });
+  }, [actorRef, giftInfo, signerCredentials]);
 
   return (
     <BaseModalDialog
@@ -189,6 +191,7 @@ export function CancellationDialog({
       onClose={abortCancellation}
       isDismissable
     >
+      <Dialog.Title />
       {snapshot?.matches("idleUnclaimable") ? (
         <>
           <div className="flex justify-center mb-4">
@@ -261,5 +264,5 @@ export function CancellationDialog({
         </>
       )}
     </BaseModalDialog>
-  )
+  );
 }

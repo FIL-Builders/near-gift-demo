@@ -1,94 +1,98 @@
-import { authIdentity } from "@defuse-protocol/internal-utils"
-import { X as CrossIcon } from "@phosphor-icons/react"
-import { Text } from "@radix-ui/themes"
-import { useConnectWallet } from "@src/hooks/useConnectWallet"
+"use client";
+
+import { authIdentity } from "@defuse-protocol/internal-utils";
+import { X as CrossIcon } from "@phosphor-icons/react";
+import { Text } from "@radix-ui/themes";
+import { useConnectWallet } from "@src/hooks/useConnectWallet";
 import {
   useCallback,
   useDeferredValue,
   useEffect,
   useMemo,
   useState,
-} from "react"
-import type { BalanceMapping } from "../../features/machines/depositedBalanceMachine"
-import { useModalStore, ModalType } from "../../providers/ModalStoreProvider"
+} from "react";
+import type { BalanceMapping } from "../../features/machines/depositedBalanceMachine";
+import { useModalStore, ModalType } from "../../providers/ModalStoreProvider";
 import type {
   BaseTokenInfo,
   TokenValue,
   UnifiedTokenInfo,
-} from "../../types/base"
-import { getTokenId, isBaseToken } from "../../utils/token"
+} from "../../types/base";
+import { getTokenId, isBaseToken } from "../../utils/token";
 import {
   compareAmounts,
   computeTotalBalanceDifferentDecimals,
-} from "../../utils/tokenUtils"
-import { AssetList } from "../Asset/AssetList"
-import { EmptyAssetList } from "../Asset/EmptyAssetList"
-import { SearchBar } from "../SearchBar"
-import { ModalDialog } from "./ModalDialog"
-import { ModalNoResults } from "./ModalNoResults"
+} from "../../utils/tokenUtils";
+import { AssetList } from "../Asset/AssetList";
+import { EmptyAssetList } from "../Asset/EmptyAssetList";
+import { SearchBar } from "../SearchBar";
+import { ModalDialog } from "./ModalDialog";
+import { ModalNoResults } from "./ModalNoResults";
 
-export type Token = BaseTokenInfo | UnifiedTokenInfo
+export type Token = BaseTokenInfo | UnifiedTokenInfo;
 
 export type ModalSelectAssetsPayload = {
-  modalType?: ModalType.MODAL_SELECT_ASSETS
-  token?: Token
-  tokenIn?: Token
-  tokenOut?: Token
-  fieldName?: "tokenIn" | "tokenOut" | "token"
-  tokenList?: (BaseTokenInfo | UnifiedTokenInfo)[]
+  modalType?: ModalType.MODAL_SELECT_ASSETS;
+  token?: Token;
+  tokenIn?: Token;
+  tokenOut?: Token;
+  fieldName?: "tokenIn" | "tokenOut" | "token";
+  tokenList?: (BaseTokenInfo | UnifiedTokenInfo)[];
   /** @deprecated legacy props use holdings instead */
-  balances?: BalanceMapping
-  accountId?: string
-  onConfirm?: (payload: ModalSelectAssetsPayload) => void
-  isHoldingsEnabled?: boolean
-}
+  balances?: BalanceMapping;
+  accountId?: string;
+  onConfirm?: (payload: ModalSelectAssetsPayload) => void;
+  isHoldingsEnabled?: boolean;
+};
 
 export type SelectItemToken<T = Token> = {
-  token: T
-  disabled: boolean
-  selected: boolean
-  defuseAssetId?: string
-  usdValue?: number
-  value?: TokenValue
-  isHoldingsEnabled: boolean
-}
+  token: T;
+  disabled: boolean;
+  selected: boolean;
+  defuseAssetId?: string;
+  usdValue?: number;
+  value?: TokenValue;
+  isHoldingsEnabled: boolean;
+};
 
 export const ModalSelectAssets = () => {
-  const [searchValue, setSearchValue] = useState("")
-  const [assetList, setAssetList] = useState<SelectItemToken[]>([])
+  const [searchValue, setSearchValue] = useState("");
+  const [assetList, setAssetList] = useState<SelectItemToken[]>([]);
 
-  const { onCloseModal, modalType, payload } = useModalStore()
-  const deferredQuery = useDeferredValue(searchValue)
+  const { onCloseModal, modalType, payload } = useModalStore();
+  const deferredQuery = useDeferredValue(searchValue);
 
   // Minimal demo: omit live holdings lookup to reduce dependencies
-  const { state } = useConnectWallet()
+  const { state } = useConnectWallet();
   const userId =
     state.isVerified && state.address && state.chainType
       ? authIdentity.authHandleToIntentsUserId(state.address, state.chainType)
-      : null
-  const holdings: Array<{
-    token: BaseTokenInfo | UnifiedTokenInfo
-    value: TokenValue
-    usdValue?: number
-  }> | undefined = undefined
+      : null;
+  const holdings:
+    | Array<{
+        token: BaseTokenInfo | UnifiedTokenInfo;
+        value: TokenValue;
+        usdValue?: number;
+      }>
+    | undefined = undefined;
 
-  const handleSearchClear = () => setSearchValue("")
+  const handleSearchClear = () => setSearchValue("");
 
   const filterPattern = useCallback(
     (asset: SelectItemToken) => {
-      const formattedQuery = deferredQuery.toLocaleUpperCase()
+      const formattedQuery = deferredQuery.toLocaleUpperCase();
 
       return (
         asset.token.symbol.toLocaleUpperCase().includes(formattedQuery) ||
         asset.token.name.toLocaleUpperCase().includes(formattedQuery)
-      )
+      );
     },
     [deferredQuery]
-  )
+  );
 
   const handleSelectToken = (selectedItem: SelectItemToken) => {
     if (modalType !== ModalType.MODAL_SELECT_ASSETS) {
-      throw new Error("Invalid modal type")
+      throw new Error("Invalid modal type");
     }
 
     const newPayload: ModalSelectAssetsPayload = {
@@ -96,42 +100,42 @@ export const ModalSelectAssets = () => {
       modalType: ModalType.MODAL_SELECT_ASSETS,
       [(payload as ModalSelectAssetsPayload).fieldName || "token"]:
         selectedItem.token,
-    }
-    onCloseModal(newPayload)
+    };
+    onCloseModal(newPayload);
 
     if (newPayload?.onConfirm) {
-      newPayload.onConfirm(newPayload)
+      newPayload.onConfirm(newPayload);
     }
-  }
+  };
 
   useEffect(() => {
-    const payload_ = payload as ModalSelectAssetsPayload
-    const fieldName = payload_.fieldName || "token"
-    const selectToken = payload_[fieldName]
+    const payload_ = payload as ModalSelectAssetsPayload;
+    const fieldName = payload_.fieldName || "token";
+    const selectToken = payload_[fieldName];
 
-    const isHoldingsEnabled = false
+    const isHoldingsEnabled = false;
 
     // TODO: remove this once we remove the legacy props
-    const balances = (payload as ModalSelectAssetsPayload).balances ?? {}
+    const balances = (payload as ModalSelectAssetsPayload).balances ?? {};
 
     const selectedTokenId = selectToken
       ? isBaseToken(selectToken)
         ? selectToken.defuseAssetId
         : selectToken.unifiedAssetId
-      : undefined
+      : undefined;
 
-    const getAssetList: SelectItemToken[] = []
-    const list = payload_.tokenList ?? []
+    const getAssetList: SelectItemToken[] = [];
+    const list = payload_.tokenList ?? [];
     for (const token of list) {
       const tokenId = isBaseToken(token)
         ? token.defuseAssetId
-        : token.unifiedAssetId
-      const disabled = selectedTokenId != null && tokenId === selectedTokenId
+        : token.unifiedAssetId;
+      const disabled = selectedTokenId != null && tokenId === selectedTokenId;
 
       // TODO: remove this once we remove the legacy props
-      const balance = computeTotalBalanceDifferentDecimals(token, balances)
+      const balance = computeTotalBalanceDifferentDecimals(token, balances);
 
-      const findHolding = undefined
+      const findHolding = undefined;
 
       getAssetList.push({
         token,
@@ -140,44 +144,44 @@ export const ModalSelectAssets = () => {
         usdValue: undefined,
         value: balance,
         isHoldingsEnabled: false,
-      })
+      });
     }
 
     // Put tokens with balance on top
     getAssetList.sort((a, b) => {
       if (a.value == null && b.value == null) {
-        return 0
+        return 0;
       }
       if (a.value == null) {
-        return 1
+        return 1;
       }
       if (b.value == null) {
-        return -1
+        return -1;
       }
-      return compareAmounts(b.value, a.value)
-    })
+      return compareAmounts(b.value, a.value);
+    });
 
     // Put tokens with usdValue on top
     getAssetList.sort((a, b) => {
       if (a.usdValue == null && b.usdValue == null) {
-        return 0
+        return 0;
       }
       if (a.usdValue == null) {
-        return 1
+        return 1;
       }
       if (b.usdValue == null) {
-        return -1
+        return -1;
       }
-      return b.usdValue - a.usdValue
-    })
+      return b.usdValue - a.usdValue;
+    });
 
-    setAssetList(getAssetList)
-  }, [payload])
+    setAssetList(getAssetList);
+  }, [payload]);
 
   const filteredAssets = useMemo(
     () => assetList.filter(filterPattern),
     [assetList, filterPattern]
-  )
+  );
 
   return (
     <ModalDialog>
@@ -212,5 +216,5 @@ export const ModalSelectAssets = () => {
         </div>
       </div>
     </ModalDialog>
-  )
-}
+  );
+};

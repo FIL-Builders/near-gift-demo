@@ -1,46 +1,53 @@
-import { X as CrossIcon } from "@phosphor-icons/react"
-import * as Dialog from "@radix-ui/react-dialog"
-import { Theme } from "@radix-ui/themes"
-import clsx from "clsx"
-import { type PropsWithChildren, useCallback, useEffect, useState } from "react"
+"use client";
 
-import { useModalStore } from "../../../providers/ModalStoreProvider"
+import { X as CrossIcon } from "@phosphor-icons/react";
+import * as Dialog from "@radix-ui/react-dialog";
+import { Theme } from "@radix-ui/themes";
+import clsx from "clsx";
+import {
+  type PropsWithChildren,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
+import { useModalStore } from "../../../providers/ModalStoreProvider";
 
 export const ModalDialog = ({
   children,
   onClose,
   isDismissable,
 }: PropsWithChildren<{
-  onClose?: () => void
-  isDismissable?: boolean
+  onClose?: () => void;
+  isDismissable?: boolean;
 }>) => {
-  const { onCloseModal } = useModalStore()
-  const [open, setOpen] = useState(true)
+  const { onCloseModal } = useModalStore();
+  const [open, setOpen] = useState(true);
 
   const handleCloseModal = useCallback(() => {
     if (!open) {
-      onCloseModal()
-      onClose?.()
+      onCloseModal();
+      onClose?.();
     }
-  }, [open, onCloseModal, onClose])
+  }, [open, onCloseModal, onClose]);
 
   useEffect(() => {
-    handleCloseModal()
-  }, [handleCloseModal])
+    handleCloseModal();
+  }, [handleCloseModal]);
 
   return (
     <BaseModalDialog
       open={open}
       onClose={() => {
-        setOpen(false)
-        handleCloseModal()
+        setOpen(false);
+        handleCloseModal();
       }}
       isDismissable={isDismissable}
     >
       {children}
     </BaseModalDialog>
-  )
-}
+  );
+};
 
 export function BaseModalDialog({
   open,
@@ -49,17 +56,17 @@ export function BaseModalDialog({
   onCloseAnimationEnd,
   isDismissable,
 }: PropsWithChildren<{
-  open: boolean
-  onClose?: () => void
-  onCloseAnimationEnd?: () => void
-  isDismissable?: boolean
+  open: boolean;
+  onClose?: () => void;
+  onCloseAnimationEnd?: () => void;
+  isDismissable?: boolean;
 }>) {
   return (
     <Dialog.Root
       open={open}
       onOpenChange={(open) => {
         if (!open) {
-          onClose?.()
+          onClose?.();
         }
       }}
     >
@@ -73,7 +80,7 @@ export function BaseModalDialog({
             )}
             onAnimationEnd={() => {
               if (!open && onCloseAnimationEnd) {
-                onCloseAnimationEnd()
+                onCloseAnimationEnd();
               }
             }}
           >
@@ -102,13 +109,12 @@ export function BaseModalDialog({
                   onOpenAutoFocus={(e) => {
                     // This is a workaround for focusing the first input in the modal
                     // Focusing first input is annoying for mobile users
-                    e.preventDefault()
+                    e.preventDefault();
                   }}
                   // Suppressing the warning about missing aria-describedby
                   aria-describedby={undefined}
                 >
                   <Dialog.Title />
-
                   {isDismissable && (
                     <Dialog.Close className="flex items-center justify-center absolute top-5 right-5 size-10 rounded-full hover:bg-gray-3 active:bg-gray-4">
                       <CrossIcon weight="bold" className="size-5" />
@@ -123,5 +129,5 @@ export function BaseModalDialog({
         </Theme>
       </Dialog.Portal>
     </Dialog.Root>
-  )
+  );
 }

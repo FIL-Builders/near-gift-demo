@@ -1,11 +1,11 @@
-import Layout from "@src/components/Layout"
-import { PreloadFeatureFlags } from "@src/components/PreloadFeatureFlags"
-import { settings } from "@src/config/settings"
-import type { Metadata } from "next"
-import type { ReactNode } from "react"
+import Layout from "@src/components/Layout";
+import { PreloadFeatureFlags } from "@src/components/PreloadFeatureFlags";
+import { settings } from "@src/config/settings";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
 export function generateMetadata(): Metadata {
-  return settings.metadata.account
+  return settings.metadata.account;
 }
 
 export default function AccountLayout({ children }: { children: ReactNode }) {
@@ -13,5 +13,5 @@ export default function AccountLayout({ children }: { children: ReactNode }) {
     <PreloadFeatureFlags>
       <Layout>{children}</Layout>
     </PreloadFeatureFlags>
-  )
+  );
 }

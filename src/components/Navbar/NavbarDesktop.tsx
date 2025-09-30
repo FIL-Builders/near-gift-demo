@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { Plus } from "@phosphor-icons/react"
-import { Button } from "@radix-ui/themes"
-import { navigation } from "@src/constants/routes"
-import { useIsActiveLink } from "@src/hooks/useIsActiveLink"
-import { cn } from "@src/utils/cn"
-import Link from "next/link"
+import { Plus } from "@phosphor-icons/react";
+import { Button } from "@radix-ui/themes";
+import { navigation } from "@src/constants/routes";
+import { useIsActiveLink } from "@src/hooks/useIsActiveLink";
+import { cn } from "@src/utils/cn";
+import Link from "next/link";
 
 export function NavbarDesktop() {
-  const { isActive } = useIsActiveLink()
+  const { isActive } = useIsActiveLink();
 
-  const isAccountActive = isActive(navigation.account)
-  const isGiftActive = isActive(navigation.gift, false)
-  // Trade removed in learning edition
+  const isAccountActive = isActive(navigation.account);
+  const isGiftActive = isActive(navigation.gift, false);
+  const isMyGiftsActive = isActive(navigation.myGifts);
 
   return (
     <nav className="flex justify-between items-center gap-4">
@@ -26,9 +26,14 @@ export function NavbarDesktop() {
       {/* Gift */}
       <NavItem label="Gift" isActive={isGiftActive} href={navigation.gift} />
 
-      {/* Trade removed */}
+      {/* My Gifts */}
+      <NavItem
+        label="My Gifts"
+        isActive={isMyGiftsActive}
+        href={navigation.myGifts}
+      />
     </nav>
-  )
+  );
 }
 
 function NavItem({
