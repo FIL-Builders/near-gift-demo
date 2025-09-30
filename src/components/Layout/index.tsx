@@ -14,8 +14,6 @@ import { NavbarDeposit, NavbarDesktop } from "../Navbar/NavbarDesktop"
 import Main from "./Main"
 
 const Layout: React.FC<PropsWithChildren> = ({ children }) => {
-  // analytics removed
-
   return (
     <div className="flex flex-col min-h-screen">
       <Header

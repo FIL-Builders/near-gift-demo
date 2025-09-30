@@ -1,35 +1,34 @@
-"use client"
-import { useConnectWallet } from "@src/hooks/useConnectWallet"
-import Link from "next/link"
+"use client";
+import { useConnectWallet } from "@src/hooks/useConnectWallet";
+import { ButtonCustom as CustomButton } from "@src/components/DefuseSDK/components/Button/ButtonCustom";
+import { useRouter } from "next/navigation";
+import { navigation } from "@src/constants/routes";
 
 export default function AccountPage() {
-  const { state } = useConnectWallet()
-  const address = state.isVerified ? state.address : null
-
+  const { state } = useConnectWallet();
+  const address = state.isVerified ? state.address : null;
+  const router = useRouter();
   return (
     <main className="mx-auto max-w-xl p-6">
       <h1 className="text-2xl font-bold mb-4">Account</h1>
       <div className="rounded-xl border p-4 bg-gray-1">
         <div className="text-sm text-gray-11">Connected address</div>
-        <div className="font-mono break-all text-lg">
+        <div className="font-mono text-lg max-w-full break-all line-clamp-1">
           {address ?? "Not connected"}
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-3 gap-3">
-        <Link href="/deposit" className="rounded-md bg-black px-4 py-2 text-white text-center">
+      <div className="mt-6 grid md:grid-cols-3 grid-cols-1 gap-3">
+        <CustomButton onClick={() => router.push(navigation.deposit)}>
           Deposit
-        </Link>
-        <Link href="/withdraw" className="rounded-md bg-black px-4 py-2 text-white text-center">
+        </CustomButton>
+        <CustomButton onClick={() => router.push(navigation.withdraw)}>
           Withdraw
-        </Link>
-        <Link
-          href="/gift-card/create-gift"
-          className="rounded-md bg-black px-4 py-2 text-white text-center"
-        >
+        </CustomButton>
+        <CustomButton onClick={() => router.push(navigation.gift)}>
           Gift
-        </Link>
+        </CustomButton>
       </div>
     </main>
-  )
+  );
 }

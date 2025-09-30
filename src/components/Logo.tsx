@@ -1,65 +1,9 @@
-import Image from "next/image"
-import Link from "next/link"
+import Image from "next/image";
+import Link from "next/link";
 
-import { navigation } from "@src/constants/routes"
-import { FeatureFlagsContext } from "@src/providers/FeatureFlagsProvider"
-import { useContext } from "react"
+import { navigation } from "@src/constants/routes";
 
 const Logo = () => {
-  const { whitelabelTemplate } = useContext(FeatureFlagsContext)
-
-  if (whitelabelTemplate === "solswap") {
-    return (
-      <Link href={navigation.home}>
-        <Image
-          src="/static/templates/solswap/logo.svg"
-          alt="Solswap Logo"
-          width={100}
-          height={32}
-        />
-      </Link>
-    )
-  }
-
-  if (whitelabelTemplate === "turboswap") {
-    return (
-      <Link href={navigation.home}>
-        <Image
-          src="/static/templates/turboswap/logo.svg"
-          alt="Turboswap Logo"
-          width={120}
-          height={32}
-        />
-      </Link>
-    )
-  }
-
-  if (whitelabelTemplate === "dogecoinswap") {
-    return (
-      <Link href={navigation.home}>
-        <Image
-          src="/static/templates/dogecoinswap/logo.svg"
-          alt="Dogecoinswap Logo"
-          width={118}
-          height={32}
-        />
-      </Link>
-    )
-  }
-
-  if (whitelabelTemplate === "trumpswap") {
-    return (
-      <Link href={navigation.home}>
-        <Image
-          src="/static/templates/trumpswap/logo.svg"
-          alt="TrumpSwap Logo"
-          width={126}
-          height={32}
-        />
-      </Link>
-    )
-  }
-
   return (
     <Link href={navigation.home}>
       <Image
@@ -69,7 +13,7 @@ const Logo = () => {
         height={32}
       />
     </Link>
-  )
-}
+  );
+};
 
-export default Logo
+export default Logo;

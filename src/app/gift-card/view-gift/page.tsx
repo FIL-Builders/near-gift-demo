@@ -17,7 +17,6 @@ function ViewGiftContent() {
 
   return (
     <Paper>
-      {/* @ts-expect-error TODO: Enable in next @defuse-protocol/defuse-sdk release */}
       <GiftTakerWidget
         giftId={giftId}
         payload={payload}

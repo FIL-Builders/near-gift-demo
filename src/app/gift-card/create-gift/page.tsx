@@ -1,6 +1,6 @@
 "use client"
 import { GiftHistoryWidget } from "@src/components/DefuseSDK/features/gift/components/GiftHistoryWidget"
-import { GiftMakerWidget } from "@src/components/DefuseSDK/features/gift/components/GiftMakerWidget"
+import { GiftMakerStepperWidget } from "@src/components/DefuseSDK/features/gift/components/GiftMakerStepperWidget"
 import Paper from "@src/components/Paper"
 import { LIST_TOKENS } from "@src/constants/tokens"
 import { useConnectWallet } from "@src/hooks/useConnectWallet"
@@ -25,7 +25,7 @@ function CreateGiftContent() {
   return (
     <Paper>
       <div className="flex flex-col items-center gap-8">
-        <GiftMakerWidget
+        <GiftMakerStepperWidget
           tokenList={tokenList}
           userAddress={userAddress}
           chainType={userChainType}

@@ -68,3 +68,11 @@ supabase/.temp/
 # Misc
 *.swp
 *.swo
+
+
+#claude
+.claude/
+.mcp.json
+#claude-code-storage
+claude-code-storage/
+

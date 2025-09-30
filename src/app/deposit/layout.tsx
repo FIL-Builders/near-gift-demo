@@ -1,20 +1,13 @@
-import type { Metadata } from "next"
-import type React from "react"
-import type { PropsWithChildren } from "react"
+import type { Metadata } from "next";
+import type React from "react";
+import type { PropsWithChildren } from "react";
 
-import Layout from "@src/components/Layout"
-import { PreloadFeatureFlags } from "@src/components/PreloadFeatureFlags"
-import { whitelabelTemplateFlag } from "@src/config/featureFlags"
-import { settings } from "@src/config/settings"
+import Layout from "@src/components/Layout";
+import { PreloadFeatureFlags } from "@src/components/PreloadFeatureFlags";
+import { settings } from "@src/config/settings";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const templ = await whitelabelTemplateFlag()
-
-  if (templ !== "dogecoinswap") {
-    return settings.metadata.deposit
-  }
-
-  return {}
+  return settings.metadata.deposit;
 }
 
 const DepositLayout: React.FC<PropsWithChildren> = ({ children }) => {
@@ -22,7 +15,7 @@ const DepositLayout: React.FC<PropsWithChildren> = ({ children }) => {
     <PreloadFeatureFlags>
       <Layout>{children}</Layout>
     </PreloadFeatureFlags>
-  )
-}
+  );
+};
 
-export default DepositLayout
+export default DepositLayout;
