@@ -8,6 +8,7 @@ import {
 import { useActorRef, useSelector } from "@xstate/react";
 import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { ActorRefFrom, PromiseActorLogic } from "xstate";
 import { AuthGate } from "../../../components/AuthGate";
 import { BlockMultiBalances } from "../../../components/Block/BlockMultiBalances";
@@ -108,6 +109,7 @@ export function GiftMakerStepperWidget(props: GiftMakerWidgetProps) {
     processingLabel: null,
     isLoggedIn: false,
   });
+  const router = useRouter();
 
   const steps: Step[] = [
     {
@@ -229,7 +231,7 @@ export function GiftMakerStepperWidget(props: GiftMakerWidgetProps) {
               </p>
             </div>
 
-            <div className="h-[240px] flex flex-col">
+            <div className="h-[280px] flex flex-col">
               <GiftMakerStepperContent
                 {...props}
                 currentStep={currentStep}
@@ -264,7 +266,23 @@ export function GiftMakerStepperWidget(props: GiftMakerWidgetProps) {
 
             <div>
               {isLastStep ? (
-                <form onSubmit={handleSubmit}>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    // Trigger submit flow
+                    handleSubmit(e);
+                    // If the button is showing "Done", navigate to my-gifts
+                    if (
+                      getButtonText(
+                        submitState.balanceInsufficient,
+                        submitState.editing,
+                        submitState.processing
+                      ) === "Done"
+                    ) {
+                      router.push("/gift-card/my-gifts");
+                    }
+                  }}
+                >
                   <AuthGate
                     renderHostAppLink={props.renderHostAppLink}
                     shouldRender={submitState.isLoggedIn}

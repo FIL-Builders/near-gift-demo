@@ -9,12 +9,12 @@ export function getButtonText(
     return "Insufficient Balance"
   }
   if (processing) {
-    return "Processing..."
+    return ""
   }
   if (editing) {
     return "Create Gift"
   }
-  return "Confirm transaction in your wallet..."
+  return "Done"
 }
 
 export function checkInsufficientBalance(

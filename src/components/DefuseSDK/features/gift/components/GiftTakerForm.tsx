@@ -87,7 +87,7 @@ export function GiftTakerForm({
         message={
           giftInfo.message.length > 0
             ? giftInfo.message
-            : "You've received a gift! Click to claim it."
+            : ""
         }
         imageUrl={imageUrl}
       />
