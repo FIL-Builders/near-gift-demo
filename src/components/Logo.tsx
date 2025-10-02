@@ -9,8 +9,8 @@ const Logo = () => {
       <Image
         src="/static/templates/near-intents/logo.svg"
         alt="Near Intent Logo"
-        width={125}
-        height={32}
+        width={100}
+        height={24}
       />
     </Link>
   );

@@ -12,7 +12,7 @@ export function getButtonText(
     return "Processing..."
   }
   if (editing) {
-    return "Create gift link"
+    return "Create Gift"
   }
   return "Confirm transaction in your wallet..."
 }

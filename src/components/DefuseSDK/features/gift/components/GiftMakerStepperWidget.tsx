@@ -94,6 +94,20 @@ const MAX_MESSAGE_LENGTH = 500;
 
 export function GiftMakerStepperWidget(props: GiftMakerWidgetProps) {
   const [currentStep, setCurrentStep] = useState(0);
+  const submitHandlerRef = useRef<(() => void) | null>(null);
+  const [submitState, setSubmitState] = useState<{
+    processing: boolean;
+    balanceInsufficient: boolean;
+    editing: boolean;
+    processingLabel: string | null;
+    isLoggedIn: boolean;
+  }>({
+    processing: false,
+    balanceInsufficient: false,
+    editing: false,
+    processingLabel: null,
+    isLoggedIn: false,
+  });
 
   const steps: Step[] = [
     {
@@ -128,6 +142,13 @@ export function GiftMakerStepperWidget(props: GiftMakerWidgetProps) {
   const handlePrev = () => {
     if (canGoPrev) {
       setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (submitHandlerRef.current) {
+      submitHandlerRef.current();
     }
   };
 
@@ -208,7 +229,7 @@ export function GiftMakerStepperWidget(props: GiftMakerWidgetProps) {
               </p>
             </div>
 
-            <div className="min-h-[400px]">
+            <div className="h-[240px] flex flex-col">
               <GiftMakerStepperContent
                 {...props}
                 currentStep={currentStep}
@@ -217,31 +238,51 @@ export function GiftMakerStepperWidget(props: GiftMakerWidgetProps) {
                 canGoNext={canGoNext}
                 canGoPrev={canGoPrev}
                 isLastStep={isLastStep}
+                submitHandlerRef={submitHandlerRef}
+                setSubmitState={setSubmitState}
               />
             </div>
           </div>
 
           {/* Navigation Buttons */}
-          {currentStep < 2 && (
-            <div className="flex items-center justify-between pt-6 border-t border-gray-6">
-              <div>
-                {canGoPrev && (
-                  <ButtonCustom
-                    variant="secondary"
-                    onClick={handlePrev}
-                    className="flex items-center gap-2"
+          <div className="relative flex justify-between pt-6 border-t border-gray-6">
+            <div>
+              {canGoPrev && (
+                <ButtonCustom
+                  variant="secondary"
+                  onClick={handlePrev}
+                  className="flex items-center gap-2"
+                >
+                  <ChevronLeftIcon className="w-4 h-4" />
+                </ButtonCustom>
+              )}
+            </div>
+
+            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-gray-9 pt-6">
+              Step {currentStep + 1} of {steps.length}
+            </div>
+
+            <div>
+              {isLastStep ? (
+                <form onSubmit={handleSubmit}>
+                  <AuthGate
+                    renderHostAppLink={props.renderHostAppLink}
+                    shouldRender={submitState.isLoggedIn}
                   >
-                    <ChevronLeftIcon className="w-4 h-4" />
-                  </ButtonCustom>
-                )}
-              </div>
-
-              <div className="text-xs text-gray-9">
-                Step {currentStep + 1} of {steps.length}
-              </div>
-
-              <div>
-                {canGoNext && (
+                    <ButtonCustom
+                      type="submit"
+                      size="base"
+                      variant={submitState.processing ? "secondary" : "primary"}
+                      isLoading={submitState.processing}
+                      disabled={submitState.balanceInsufficient || submitState.processing}
+                      className="flex items-center p-5"
+                    >
+                      {getButtonText(submitState.balanceInsufficient, submitState.editing, submitState.processing)}
+                    </ButtonCustom>
+                  </AuthGate>
+                </form>
+              ) : (
+                canGoNext && (
                   <ButtonCustom
                     variant="primary"
                     onClick={handleNext}
@@ -249,10 +290,10 @@ export function GiftMakerStepperWidget(props: GiftMakerWidgetProps) {
                   >
                     <ChevronRightIcon className="w-4 h-4" />
                   </ButtonCustom>
-                )}
-              </div>
+                )
+              )}
             </div>
-          )}
+          </div>
         </div>
       </SwapWidgetProvider>
     </WidgetRoot>
@@ -277,6 +318,8 @@ function GiftMakerStepperContent({
   canGoNext,
   canGoPrev,
   isLastStep,
+  submitHandlerRef,
+  setSubmitState,
 }: GiftMakerWidgetProps & {
   currentStep: number;
   onNext: () => void;
@@ -284,6 +327,14 @@ function GiftMakerStepperContent({
   canGoNext: boolean;
   canGoPrev: boolean;
   isLastStep: boolean;
+  submitHandlerRef: React.MutableRefObject<(() => void) | null>;
+  setSubmitState: React.Dispatch<React.SetStateAction<{
+    processing: boolean;
+    balanceInsufficient: boolean;
+    editing: boolean;
+    processingLabel: string | null;
+    isLoggedIn: boolean;
+  }>>;
 }) {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
@@ -526,99 +577,117 @@ function GiftMakerStepperContent({
     }
   };
 
+  // Set up the submit handler for the main component
+  useEffect(() => {
+    submitHandlerRef.current = () => {
+      if (signerCredentials != null) {
+        rootActorRef.send({
+          type: "REQUEST_SIGN",
+          signMessage,
+          signerCredentials,
+        });
+      }
+    };
+    return () => {
+      submitHandlerRef.current = null;
+    };
+  }, [signerCredentials, rootActorRef, signMessage]);
+
+  // Update submit state for the main component
+  useEffect(() => {
+    setSubmitState({
+      processing,
+      balanceInsufficient,
+      editing,
+      processingLabel,
+      isLoggedIn,
+    });
+  }, [processing, balanceInsufficient, editing, processingLabel, isLoggedIn]);
+
   if (currentStep === 0) {
     // Step 1: Amount Selection
     return (
-      <div className="space-y-4">
-        {(rootSnapshot as any).matches("settled") &&
-          readyGiftRef != null &&
-          signerCredentials != null && (
-            <GiftMakerReadyDialog
-              readyGiftRef={readyGiftRef}
-              generateLink={generateLink}
-              signerCredentials={signerCredentials}
+      <div className="flex flex-col h-full">
+        <div className="flex-1 space-y-4">
+          {(rootSnapshot as any).matches("settled") &&
+            readyGiftRef != null &&
+            signerCredentials != null && (
+              <GiftMakerReadyDialog
+                readyGiftRef={readyGiftRef}
+                generateLink={generateLink}
+                signerCredentials={signerCredentials}
+              />
+            )}
+
+          <div className="flex flex-col gap-3">
+            <TokenAmountInputCard
+              variant="2"
+              labelSlot={
+                <label
+                  htmlFor="gift-amount-in"
+                  className="font-bold text-label text-sm"
+                >
+                  Gift amount
+                </label>
+              }
+              inputSlot={
+                <TokenAmountInputCard.Input
+                  id="gift-amount-in"
+                  name="amount"
+                  value={formValues.amount}
+                  onChange={(e) =>
+                    (formValuesRef as any).trigger.updateAmount({
+                      value: e.target.value,
+                    })
+                  }
+                  disabled={processing}
+                />
+              }
+              tokenSlot={
+                <SelectAssets
+                  selected={formValues.token ?? undefined}
+                  handleSelect={() =>
+                    openModalSelectAssets("token", formValues.token)
+                  }
+                />
+              }
+              balanceSlot={
+                <BlockMultiBalances
+                  balance={balanceAmount}
+                  decimals={tokenBalance?.decimals ?? 0}
+                  className={clsx("!static", tokenBalance == null && "invisible")}
+                  maxButtonSlot={
+                    <BlockMultiBalances.DisplayMaxButton
+                      onClick={handleSetMaxValue}
+                      balance={balanceAmount}
+                      disabled={disabled}
+                    />
+                  }
+                  halfButtonSlot={
+                    <BlockMultiBalances.DisplayHalfButton
+                      onClick={handleSetHalfValue}
+                      balance={balanceAmount}
+                      disabled={disabled}
+                    />
+                  }
+                />
+              }
+              priceSlot={
+                <TokenAmountInputCard.DisplayPrice>
+                  {usdAmount !== null && usdAmount > 0
+                    ? formatUsdAmount(usdAmount)
+                    : null}
+                </TokenAmountInputCard.DisplayPrice>
+              }
             />
+          </div>
+
+          {error != null && (
+            <div className="mt-2">
+              <ErrorReason reason={error.reason} />
+            </div>
           )}
-
-        <div className="bg-blue-2 border border-blue-6 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 bg-blue-9 rounded-full"></div>
-            <span className="text-sm font-medium text-blue-11">Tip</span>
-          </div>
-          <p className="text-sm text-blue-11">
-            Choose any token from your wallet balance. The recipient will
-            receive this exact amount.
-          </p>
         </div>
-
-        <div className="flex flex-col gap-3">
-          <TokenAmountInputCard
-            variant="2"
-            labelSlot={
-              <label
-                htmlFor="gift-amount-in"
-                className="font-bold text-label text-sm"
-              >
-                Gift amount
-              </label>
-            }
-            inputSlot={
-              <TokenAmountInputCard.Input
-                id="gift-amount-in"
-                name="amount"
-                value={formValues.amount}
-                onChange={(e) =>
-                  (formValuesRef as any).trigger.updateAmount({
-                    value: e.target.value,
-                  })
-                }
-                disabled={processing}
-              />
-            }
-            tokenSlot={
-              <SelectAssets
-                selected={formValues.token ?? undefined}
-                handleSelect={() =>
-                  openModalSelectAssets("token", formValues.token)
-                }
-              />
-            }
-            balanceSlot={
-              <BlockMultiBalances
-                balance={balanceAmount}
-                decimals={tokenBalance?.decimals ?? 0}
-                className={clsx("!static", tokenBalance == null && "invisible")}
-                maxButtonSlot={
-                  <BlockMultiBalances.DisplayMaxButton
-                    onClick={handleSetMaxValue}
-                    balance={balanceAmount}
-                    disabled={disabled}
-                  />
-                }
-                halfButtonSlot={
-                  <BlockMultiBalances.DisplayHalfButton
-                    onClick={handleSetHalfValue}
-                    balance={balanceAmount}
-                    disabled={disabled}
-                  />
-                }
-              />
-            }
-            priceSlot={
-              <TokenAmountInputCard.DisplayPrice>
-                {usdAmount !== null && usdAmount > 0
-                  ? formatUsdAmount(usdAmount)
-                  : null}
-              </TokenAmountInputCard.DisplayPrice>
-            }
-          />
-        </div>
-
-        {error != null && (
-          <div className="mt-2">
-            <ErrorReason reason={error.reason} />
-          </div>
-        )}
       </div>
     );
   }
@@ -626,61 +695,50 @@ function GiftMakerStepperContent({
   if (currentStep === 1) {
     // Step 2: Message and Photo
     return (
-      <div className="space-y-4">
-        <div className="bg-green-2 border border-green-6 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 bg-green-9 rounded-full"></div>
-            <span className="text-sm font-medium text-green-11">
-              Personal Touch
-            </span>
-          </div>
-          <p className="text-sm text-green-11">
-            Add a heartfelt message and optionally include a special photo to
-            make your gift more meaningful.
-          </p>
-        </div>
-
-        <div className="w-full">
-          <GiftMessageInput
-            inputSlot={
-              <GiftMessageInput.Input
-                id="gift-message"
-                name="message"
-                value={formValues.message}
-                onChange={(e) =>
-                  (formValuesRef as any).trigger.updateMessage({
-                    value: e.target.value,
-                  })
-                }
-                maxLength={MAX_MESSAGE_LENGTH}
-              />
-            }
-            countSlot={
-              formValues.message.length > 0 ? (
-                <GiftMessageInput.DisplayCount
-                  count={MAX_MESSAGE_LENGTH - formValues.message.length}
+      <div className="flex flex-col h-full">
+        <div className="flex-1 space-y-4">
+          <div className="w-full">
+            <GiftMessageInput
+              inputSlot={
+                <GiftMessageInput.Input
+                  id="gift-message"
+                  name="message"
+                  value={formValues.message}
+                  onChange={(e) =>
+                    (formValuesRef as any).trigger.updateMessage({
+                      value: e.target.value,
+                    })
+                  }
+                  maxLength={MAX_MESSAGE_LENGTH}
                 />
-              ) : null
-            }
-          />
-        </div>
+              }
+              countSlot={
+                formValues.message.length > 0 ? (
+                  <GiftMessageInput.DisplayCount
+                    count={MAX_MESSAGE_LENGTH - formValues.message.length}
+                  />
+                ) : null
+              }
+            />
+          </div>
 
-        <div className="w-full">
-          <label className="block text-sm font-medium text-gray-12 mb-2">
-            Memory Photo (Optional)
-          </label>
-          <FileUploadButton
-            onFileSelect={onUploadChange}
-            uploading={uploading}
-            uploadProgress={uploadProgress}
-            uploadError={uploadError}
-            previewUrl={
-              formValues.imageCid
-                ? `https://gateway.lighthouse.storage/ipfs/${formValues.imageCid}`
-                : null
-            }
-            disabled={processing}
-          />
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-12 mb-2">
+              Memory Photo (Optional)
+            </label>
+            <FileUploadButton
+              onFileSelect={onUploadChange}
+              uploading={uploading}
+              uploadProgress={uploadProgress}
+              uploadError={uploadError}
+              previewUrl={
+                formValues.imageCid
+                  ? `https://gateway.lighthouse.storage/ipfs/${formValues.imageCid}`
+                  : null
+              }
+              disabled={processing}
+            />
+          </div>
         </div>
       </div>
     );
@@ -689,97 +747,58 @@ function GiftMakerStepperContent({
   if (currentStep === 2) {
     // Step 3: Review and Submit
     return (
-      <div className="space-y-6">
-        <div className="bg-amber-2 border border-amber-6 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 bg-amber-9 rounded-full"></div>
-            <span className="text-sm font-medium text-amber-11">
-              Final Step
-            </span>
+      <div className="flex flex-col h-full">
+        <div className="flex-1 space-y-6">
+          {/* Gift Summary */}
+          <div className="bg-gray-2 border border-gray-6 rounded-lg p-4 space-y-3">
+            <h3 className="font-medium text-gray-12">Gift Summary</h3>
+
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-11">Token:</span>
+                <span className="text-gray-12 font-medium">
+                  {formValues.token?.name || "Not selected"}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-11">Amount:</span>
+                <span className="text-gray-12 font-medium">
+                  {formValues.amount || "0"} {formValues.token?.symbol}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-11">Message:</span>
+                <span className="text-gray-12 font-medium">
+                  {formValues.message || "No message"}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-11">Photo:</span>
+                <span className="text-gray-12 font-medium">
+                  {formValues.imageCid ? (
+                    <a
+                      href={`https://gateway.lighthouse.storage/ipfs/${formValues.imageCid}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-9 hover:text-blue-10 underline cursor-pointer transition-colors"
+                    >
+                      View file
+                    </a>
+                  ) : (
+                    "None"
+                  )}
+                </span>
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-amber-11">
-            Review your gift details below. Once you submit, a shareable link
-            will be generated for your friend.
-          </p>
+
+          {error != null && (
+            <div className="mt-2">
+              <ErrorReason reason={error.reason} />
+            </div>
+          )}
         </div>
 
-        {/* Gift Summary */}
-        <div className="bg-gray-2 border border-gray-6 rounded-lg p-4 space-y-3">
-          <h3 className="font-medium text-gray-12">Gift Summary</h3>
-
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-11">Token:</span>
-              <span className="text-gray-12 font-medium">
-                {formValues.token?.name || "Not selected"}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-11">Amount:</span>
-              <span className="text-gray-12 font-medium">
-                {formValues.amount || "0"} {formValues.token?.symbol}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-11">Message:</span>
-              <span className="text-gray-12 font-medium">
-                {formValues.message || "No message"}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-11">Photo:</span>
-              <span className="text-gray-12 font-medium">
-                {formValues.imageCid ? "Attached" : "None"}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Submit Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <AuthGate
-            renderHostAppLink={renderHostAppLink}
-            shouldRender={isLoggedIn}
-          >
-            <div className="flex items-center justify-between pt-4">
-              <div>
-                {canGoPrev && (
-                  <ButtonCustom
-                    type="button"
-                    variant="secondary"
-                    onClick={onPrev}
-                    className="flex items-center gap-2"
-                  >
-                    <ChevronLeftIcon className="w-4 h-4" />
-                  </ButtonCustom>
-                )}
-              </div>
-
-              <ButtonCustom
-                type="submit"
-                size="lg"
-                variant={processing ? "secondary" : "primary"}
-                isLoading={processing}
-                disabled={balanceInsufficient || processing}
-                className="flex items-center gap-2"
-              >
-                {getButtonText(balanceInsufficient, editing, processing)}
-              </ButtonCustom>
-            </div>
-
-            {processingLabel && (
-              <div className="mt-2 text-xs text-gray-11 text-center">
-                {processingLabel}
-              </div>
-            )}
-          </AuthGate>
-        </form>
-
-        {error != null && (
-          <div className="mt-2">
-            <ErrorReason reason={error.reason} />
-          </div>
-        )}
       </div>
     );
   }

@@ -185,15 +185,15 @@ export const ModalSelectAssets = () => {
 
   return (
     <ModalDialog>
-      <div className="flex flex-col min-h-[680px] md:max-h-[680px] h-full">
-        <div className="z-20 h-auto flex-none -mt-[var(--inset-padding-top)] -mr-[var(--inset-padding-right)] -ml-[var(--inset-padding-left)] px-5 pt-7 pb-4 sticky -top-[var(--inset-padding-top)] bg-gray-1">
-          <div className="flex flex-col gap-4">
+      <div className="flex flex-col min-h-[200px] max-h-[300px] md:max-h-[350px] h-full">
+        <div className="z-20 h-auto flex-none -mt-[var(--inset-padding-top)] -mr-[var(--inset-padding-right)] -ml-[var(--inset-padding-left)] px-4 pt-5 pb-3 sticky -top-[var(--inset-padding-top)] bg-gray-1">
+          <div className="flex flex-col gap-3">
             <div className="flex flex-row justify-between items-center">
-              <Text size="5" weight="bold">
+              <Text size="4" weight="bold">
                 Select asset
               </Text>
-              <button type="button" onClick={onCloseModal} className="p-3">
-                <CrossIcon width={18} height={18} />
+              <button type="button" onClick={onCloseModal} className="p-2">
+                <CrossIcon width={16} height={16} />
               </button>
             </div>
             <SearchBar query={searchValue} setQuery={setSearchValue} />

@@ -2,6 +2,7 @@
 
 import { X as CrossIcon } from "@phosphor-icons/react";
 import * as Dialog from "@radix-ui/react-dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Theme } from "@radix-ui/themes";
 import clsx from "clsx";
 import {
@@ -91,11 +92,11 @@ export function BaseModalDialog({
                     "relative overflow-auto m-auto",
                     "bg-gray-1 shadow-lg focus:outline-none",
                     "rounded-t-2xl md:rounded-2xl",
-                    "max-w-full md:w-[90vw] md:max-w-[472px] max-md:max-h-[70vh]",
-                    "[--inset-padding-top:theme(spacing.5)]",
-                    "[--inset-padding-right:theme(spacing.5)]",
-                    "[--inset-padding-bottom:max(env(safe-area-inset-bottom,0px),theme(spacing.5))]",
-                    "[--inset-padding-left:theme(spacing.5)]",
+                    "max-w-full md:w-[90vw] md:max-w-[400px] max-md:max-h-[60vh]",
+                    "[--inset-padding-top:theme(spacing.4)]",
+                    "[--inset-padding-right:theme(spacing.4)]",
+                    "[--inset-padding-bottom:max(env(safe-area-inset-bottom,0px),theme(spacing.4))]",
+                    "[--inset-padding-left:theme(spacing.4)]",
                     "pt-[var(--inset-padding-top)] pr-[var(--inset-padding-right)] pb-[var(--inset-padding-bottom)] pl-[var(--inset-padding-left)]",
 
                     // Animation

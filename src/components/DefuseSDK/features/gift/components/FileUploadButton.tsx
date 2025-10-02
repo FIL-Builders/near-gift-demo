@@ -148,38 +148,22 @@ export function FileUploadButton({
               alt="Uploaded preview"
               className="w-full h-40 object-cover"
             />
-            <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-              <div className="flex gap-2">
-                <ButtonCustom
-                  variant="secondary"
-                  size="sm"
-                  onClick={handleButtonClick}
-                  className="bg-white bg-opacity-90 hover:bg-opacity-100"
-                >
-                  <ImageIcon className="w-4 h-4" />
-                  Change
-                </ButtonCustom>
-                <ButtonCustom
-                  variant="danger"
-                  size="sm"
-                  onClick={handleRemoveFile}
-                  className="bg-white bg-opacity-90 hover:bg-opacity-100"
-                >
-                  <Cross2Icon className="w-4 h-4" />
-                  Remove
-                </ButtonCustom>
-              </div>
-            </div>
+            
           </div>
           <div className="p-3 bg-gray-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <ImageIcon className="w-4 h-4 text-gray-9" />
-                <span className="text-sm text-gray-11">Photo attached</span>
+                <span className="text-sm text-gray-11">Photo stored on Filecoin</span>
               </div>
-              <div className="text-xs text-gray-9">
-                Ready to share
-              </div>
+              <a
+                href={previewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-blue-9 hover:text-blue-10 underline cursor-pointer transition-colors"
+              >
+                View on Filecoin
+              </a>
             </div>
           </div>
         </div>
