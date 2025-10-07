@@ -21,7 +21,7 @@ function CreateGiftContent() {
             <div className="product-card w-full rounded-2xl sm:rounded-4xl shadow-xl overflow-hidden z-[100] relative cursor-pointer snap-start shrink-0 py-4 sm:py-8 px-3 sm:px-6 bg-white flex flex-col items-center justify-center gap-2 sm:gap-3 transition-all duration-300 group">
 
               {/* Circular Background Element */}
-              <div className="absolute -z-[100] rounded-full bg-green-100 z-20 left-1/2 top-[44%] h-[110%] w-[110%] -translate-x-1/2 group-hover:top-[58%] transition-all duration-300"></div>
+              <div className="absolute -z-[100] rounded-full bg-green-100 left-1/2 top-[44%] h-[110%] w-[110%] -translate-x-1/2 group-hover:top-[58%] transition-all duration-300"></div>
 
               {/* My Gifts Title */}
               <div className="para uppercase text-center leading-none z-40">
@@ -38,7 +38,7 @@ function CreateGiftContent() {
                   className="sm:w-[100px] sm:h-[100px]"
                 />
               </div>
-              <div className="z-500">
+              <div className="z-900">
                 <GiftHistoryWidget
                   tokenList={tokenList}
                   userAddress={state.isVerified ? state.address : undefined}
